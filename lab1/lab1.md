@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import random
+# import cupy as cp
 ```
 
 ### 2. Загрузка и подготовка данных.
@@ -23,7 +24,7 @@ title = ["time", "current", "voltage"]
 dataset_dict = dict(zip(title, dataset))
 ```
 
-    Dataset: testLab1Var5.csv
+    Dataset: testLab1Var31.csv
     
 
 ### 3. Нарисовать графики тока и напряжения.
@@ -46,7 +47,7 @@ time_interval = (time_interval, time_interval + time_period)
 print(f"Временной интервал {time_interval}")
 ```
 
-    Временной интервал (14.968918705669353, 15.468918705669353)
+    Временной интервал (31.12754696027087, 31.62754696027087)
     
 
 
@@ -119,8 +120,17 @@ I(k) = K1 * U(k-1) + K2 * I(k-1)
 X = np.transpose(np.concatenate([np.array([dataset_dict["voltage"], ]), np.array([dataset_dict["current"], ])], axis=0))
 Y = np.transpose(np.array([dataset_dict["current"], ]))
 
-X = X[1:,:]
-Y = Y[:-1,:]
+# X = X[1000:10000,:]
+# Y = Y[1000:10000,:]
+```
+
+
+```python
+# [I(k)] = K * [U(k-1);I(k-1)]
+# Y = K * X
+
+X = X[:-1, :]  # U(k-1);I(k-1)
+Y = Y[1:, :]  # I(k)
 
 print(X.shape)
 print(Y.shape)
@@ -132,10 +142,43 @@ print(Y.shape)
 
 
 ```python
+# K = Y * ~X^-1
+# ~X^-1 = ((X' * X)^(-1) * X')
 
+X_subinv = np.dot(np.linalg.inv(np.dot(X.T, X)), X.T)
+
+K = np.dot(X_subinv, Y)
+
+print(K)
+
+```
+
+    [[4.32700256e-04]
+     [9.92483596e-01]]
+    
+
+
+```python
+Td = 0.001
+
+R_est = []
+L_est = []
+
+if K[1] > 0:
+    R = 1 / K[0] * (1 - K[1])
+    T = -Td / np.log(K[1])
+    R_est.append(R)
+    L_est.append(T * R)
+
+R_est = np.array(R_est)
+L_est = np.array(L_est)
 ```
 
 
 ```python
+print('Mean value of R: ', np.mean(R_est), ' Ohm')
+print('Standart deviation of R: ', np.std(R_est))
+print('Mean value of L = ', np.mean(L_est), ' Hn')
+print('Standart deviation of R: ', np.std(L_est))
 
 ```
