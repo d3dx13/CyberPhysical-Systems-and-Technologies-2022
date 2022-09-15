@@ -12,8 +12,7 @@ os.system(f'git config credential.helper store')
 os.system(f'git pull')
 
 for path_dir in path_dirs:
-    os.system(f'chdir {path_dir}')
-    os.system(f'echo %cd%')
+    os.chdir(f'{path_dir}')
 
     os.system(f'jupyter nbconvert main.ipynb --to markdown --output main.md')
 
@@ -22,7 +21,7 @@ for path_dir in path_dirs:
     os.system(f'git commit -m \"{path_dir + " - " + commit_name}\"')
     os.system(f'git push')
 
-    os.system(f'chdir ..')
+    os.chdir(f'..')
 
 os.system(f'git reset')
 os.system(f'git add .')
