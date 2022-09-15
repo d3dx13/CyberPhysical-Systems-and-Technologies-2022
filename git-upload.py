@@ -14,5 +14,6 @@ for path_dir in path_dirs:
     os.system(f'git reset')
     os.system(f'git add .')
     os.system(f'git commit -m \"{path_dir + " - " + commit_name}\"')
+    os.system(f'git push')
 
     os.system(f'cd ..')
