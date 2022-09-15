@@ -97,7 +97,7 @@ plt.ylabel('Напряжение, В')
 
 
 ```python
-test data
+
 ```
 
 
