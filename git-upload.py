@@ -14,6 +14,8 @@ os.system(f'git pull')
 for path_dir in path_dirs:
     os.system(f'cd {path_dir}')
 
+    os.system(f'jupyter nbconvert main.ipynb --to markdown --output main.md')
+
     os.system(f'git reset')
     os.system(f'git add {path_dir}')
     os.system(f'git commit -m \"{path_dir + " - " + commit_name}\"')
