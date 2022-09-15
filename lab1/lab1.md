@@ -67,7 +67,7 @@ plt.ylabel('Сила Тока, А')
 
 
     
-![png](main.ipynb.MD_files/main.ipynb.MD_7_1.png)
+![png](lab1_files/lab1_7_1.png)
     
 
 
@@ -89,7 +89,7 @@ plt.ylabel('Напряжение, В')
 
 
     
-![png](main.ipynb.MD_files/main.ipynb.MD_8_1.png)
+![png](lab1_files/lab1_8_1.png)
     
 
 
