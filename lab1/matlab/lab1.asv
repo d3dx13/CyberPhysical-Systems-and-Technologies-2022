@@ -1,0 +1,38 @@
+% https://avtika.ru/kak-sostavit-matematicheskuyu-model-dvigatelya/
+
+clear;
+close all;
+
+syms I w U R L C J Mc;
+
+x = [I;w];
+
+A = [
+    -R/L, -C/L;
+    C/J, 0
+    ];
+
+B = [
+    1 / L, 0;
+    0, 1 / J
+    ];
+
+C = [
+    1, 0;
+    0, 1
+    ];
+
+u_syms = [U; Mc];
+
+% model = 
+% Forward Euler (difference) discretization
+
+syms z s Ts;
+s_new = (z - 1) / Ts;
+
+Gc = C * (eye(size(A))*s - A)^(-1) * B
+
+Gd = ssubs(Gc, s, s_new)
+
+
+

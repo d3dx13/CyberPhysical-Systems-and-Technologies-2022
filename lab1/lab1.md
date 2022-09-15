@@ -95,6 +95,20 @@ plt.ylabel('Напряжение, В')
 
 ### 4. Рассчитать значения параметров L и R.
 
+Упрощённая модель двигателя постоянного тока. Модель двигателя постоянного тока описывается следующей системой дифференциальных уравнений:
+
+di/dt = 1 / L * u - R / L * i - Ce
+
+dΩ/dt = Ce / J * i - 1 / J * Md
+
+Y = K*X
+
+I(k) = (Ts / L) * U(k-1) - ((R*Ts - L) / L) * I(k-1)
+
+I(k) = K1 * U(k-1) + K2 * I(k-1)
+
+
+
 
 ```python
 
@@ -102,13 +116,19 @@ plt.ylabel('Напряжение, В')
 
 
 ```python
+X = np.transpose(np.concatenate([np.array([dataset_dict["voltage"], ]), np.array([dataset_dict["current"], ])], axis=0))
+Y = np.transpose(np.array([dataset_dict["current"], ]))
 
+X = X[1:,:]
+Y = Y[:-1,:]
+
+print(X.shape)
+print(Y.shape)
 ```
 
-
-```python
-
-```
+    (100000, 2)
+    (100000, 1)
+    
 
 
 ```python
