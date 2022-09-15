@@ -18,7 +18,7 @@ for path_dir in path_dirs:
                      os.path.isfile(os.path.join(os.getcwd(), name)) and not name.startswith(".") and name.endswith(
                          ".ipynb")]
     for jupyter_file in jupyter_files:
-        os.system(f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_file}.MD')
+        os.system(f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_file[:-4]}')
 
     os.system(f'git reset')
     os.system(f'git add {path_dir}')
