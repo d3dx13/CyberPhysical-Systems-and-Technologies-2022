@@ -16,6 +16,8 @@ os.system(f'git pull')
 for path_dir in path_dirs:
     os.chdir(f'{path_dir}')
 
+    print(path_dir)
+
     jupyter_files = [name for name in os.listdir(os.getcwd()) if
                      os.path.isfile(os.path.join(os.getcwd(), name)) and not name.startswith(".") and name.endswith(
                          ".ipynb")]
