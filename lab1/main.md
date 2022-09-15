@@ -1,33 +1,17 @@
----
-jupyter:
-  jupytext:
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.14.1
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
----
-
-<!-- #region pycharm={"name": "#%% md\n"} -->
 ### 1. Импортировать библиотеки в Python.
-<!-- #endregion -->
 
-```python pycharm={"name": "#%%\n"}
+
+```python
 import numpy as np
 import matplotlib.pyplot as plt
 import os
 import random
 ```
 
-<!-- #region pycharm={"name": "#%% md\n"} -->
 ### 2. Загрузка и подготовка данных.
-<!-- #endregion -->
 
-```python pycharm={"name": "#%%\n"}
+
+```python
 name = random.choice(os.listdir("dataset"))
 print(f"Dataset: {name}")
 
@@ -39,27 +23,34 @@ title = ["time", "current", "voltage"]
 dataset_dict = dict(zip(title, dataset))
 ```
 
-<!-- #region pycharm={"name": "#%% md\n"} -->
+    Dataset: testLab1Var5.csv
+    
+
 ### 3. Нарисовать графики тока и напряжения.
 
 Для удобства отображения отображу не весь график, а некоторый его случайный диапазон заданного размера, установив лимиты на данные.
-<!-- #endregion -->
 
-```python pycharm={"name": "#%%\n"}
+
+```python
 """
 Размер интервала
 """
 time_period = 0.5
 ```
 
-```python pycharm={"name": "#%%\n"}
+
+```python
 time_interval = random.random() * (dataset_dict["time"][-1] - time_period)
 time_interval = (time_interval, time_interval + time_period)
 
 print(f"Временной интервал {time_interval}")
 ```
 
-```python pycharm={"name": "#%%\n"}
+    Временной интервал (14.968918705669353, 15.468918705669353)
+    
+
+
+```python
 plt.plot(dataset_dict["time"], dataset_dict["current"])
 plt.xlim(time_interval)
 plt.grid()
@@ -67,7 +58,21 @@ plt.xlabel('Время, с')
 plt.ylabel('Сила Тока, А')
 ```
 
-```python pycharm={"name": "#%%\n"}
+
+
+
+    Text(0, 0.5, 'Сила Тока, А')
+
+
+
+
+    
+![png](main_files/main_7_1.png)
+    
+
+
+
+```python
 plt.plot(dataset_dict["time"], dataset_dict["voltage"])
 plt.xlim(time_interval)
 plt.grid()
@@ -75,22 +80,37 @@ plt.xlabel('Время, с')
 plt.ylabel('Напряжение, В')
 ```
 
-<!-- #region pycharm={"name": "#%% md\n"} -->
+
+
+
+    Text(0, 0.5, 'Напряжение, В')
+
+
+
+
+    
+![png](main_files/main_8_1.png)
+    
+
+
 ### 4. Рассчитать значения параметров L и R.
-<!-- #endregion -->
 
-```python pycharm={"name": "#%%\n"}
 
-```
-
-```python pycharm={"name": "#%%\n"}
+```python
 
 ```
 
-```python pycharm={"name": "#%%\n"}
+
+```python
 
 ```
 
-```python pycharm={"name": "#%%\n"}
+
+```python
+
+```
+
+
+```python
 
 ```
