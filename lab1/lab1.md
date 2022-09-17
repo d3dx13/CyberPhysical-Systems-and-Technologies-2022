@@ -170,11 +170,14 @@ $$
 
 $$
 s = \dfrac{z - 1}{T_d}
-\\
+$$
+$$
 G_d(z) = G_c(s=\dfrac{z - 1}{T_s}) = \dfrac{1}{L \times (\dfrac{z - 1}{T_s} + \dfrac{R}{L})}
-\\
+$$
+$$
 G_d(z_i=z^{-1}) = \dfrac{T_d}{R \times T_d - L + L \times z_i^{-1}}
-\\
+$$
+$$
 G_d(z_i) = \dfrac{T_d \times z_i}{L - L \times z_i + R \times T_d \times z_i}
 $$
 
@@ -182,15 +185,20 @@ $$
 
 $$
 G_d(z=z_i^{-1}) = \dfrac{T_d \times z^{-1}}{L - L \times z^{-1} + R \times T_d \times z^{-1}} = \dfrac{i(z)}{u(z)}
-\\
+$$
+$$
 T_d \times u(z)*z^{-1} = i(z)*(L - L \times z^{-1} + R \times T_d \times z^{-1})
-\\
+$$
+$$
 T_d \times u(z)*z^{-1} = i(z)*L - i(z)*L \times z^{-1} + i(z)*R \times T_d \times z^{-1}
-\\
+$$
+$$
 i(z)*L = T_d \times u(z)*z^{-1} + i(z)*L \times z^{-1} - i(z)*R \times T_d \times z^{-1}
-\\
+$$
+$$
 i(z) = u(z)*z^{-1} \times (\dfrac{T_d}{L}) + i(z)*z^{-1} \times (1 - \dfrac{R \times T_d}{L})
-\\
+$$
+$$
 i(z) = u(z)*z^{-1} \times (\dfrac{T_d}{L}) - i(z)*z^{-1} \times (\dfrac{R \times T_d - L}{L})
 $$
 
