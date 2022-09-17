@@ -95,7 +95,8 @@ plt.grid()
 
 [Упрощённая модель двигателя постоянного тока](https://life-prog.ru/2_22546_model-dvigatelya-postoyannogo-toka-s-nezavisimim-vozbuzhdeniem.html). Модель двигателя постоянного тока описывается следующей системой дифференциальных уравнений:
 
-$\begin{cases}
+$$
+\begin{cases}
 u = e + R \times i + L \times \dfrac{di}{t}
 \\
 M - M_C = J \dfrac{d\omega}{t}
@@ -103,7 +104,8 @@ M - M_C = J \dfrac{d\omega}{t}
 M = C_{M} \times \Phi \times i
 \\
 e = C_{\omega} \times \Phi \times \omega
-\end{cases}$
+\end{cases}
+$$
 
 где
 
