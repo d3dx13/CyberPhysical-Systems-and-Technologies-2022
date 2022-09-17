@@ -39,8 +39,10 @@ for path_dir in path_dirs:
         jupyter_name = jupyter_file[:-6]
         p = subprocess.Popen((f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_name}'))
         p.wait()
-        os.system(f'jupyter nbconvert {jupyter_file} --to latex --output {jupyter_name}.tex')
-        os.system(f'pdflatex -interaction=batchmode {jupyter_name}.tex -output-format pdf')
+        p = subprocess.Popen((f'jupyter nbconvert {jupyter_file} --to latex --output {jupyter_name}.tex'))
+        p.wait()
+        p = subprocess.Popen((f'pdflatex -interaction=batchmode {jupyter_name}.tex -output-format pdf'))
+        p.wait()
         # os.rename(f'{jupyter_name}.pdf', f"{jupyter_name} - Отчёт Жидков А.А. R4136с.pdf")
 
         os.remove(f'{jupyter_name}.tex')
