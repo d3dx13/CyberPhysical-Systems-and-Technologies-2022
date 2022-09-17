@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.special import expit as f_act
+import cv2
 
 def init_net():
     input_nodes = 784
