@@ -92,5 +92,3 @@ os.system(f'git reset')
 os.system(f'git add .')
 os.system(f'git commit -m \"{commit_name}\"')
 os.system(f'git push')
-
-os.system(f'git lfs pull')
