@@ -204,6 +204,13 @@ print(e2_Y)
     tensor([[0.0045]], device='cuda:0', dtype=torch.float64)
     
 
+- $x + y$
+- $x - y$
+- $x \times y$
+- $x \div y$
+- $\dfrac{x}{y}$
+- $\sqrt{x}$
+
 
 ```python
 """
