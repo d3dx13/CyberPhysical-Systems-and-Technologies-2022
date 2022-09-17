@@ -20,7 +20,7 @@ for path_dir in path_dirs:
     for jupyter_file in jupyter_files:
         os.system(f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_file[:-6]}')
         # os.system(f'jupyter nbconvert {jupyter_file} --to pdf --output \"{f"{jupyter_file[:-6]} - Отчёт Жидков А.А. R4136с "}\"')
-        os.system(f'pandoc -f markdown -t beamer {jupyter_file[:-6]}.md -o {jupyter_file[:-6]}.pdf --pdf-engine=xelatex -V mainfont=\"DejaVu Serif\"')
+        os.system(f'pandoc -f markdown -t beamer {jupyter_file[:-6]}.md -o {jupyter_file[:-6]}.pdf --pdf-engine=xelatex -V fontenc=T2A')
         # pandoc MANUAL.txt --pdf-engine=xelatex -o example13.pdf  --pdf-engine=pdflatex
 
     os.system(f'git reset')
