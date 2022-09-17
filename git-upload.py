@@ -1,6 +1,23 @@
 import os
 import sys
 
+TEMP_TEX = "___o.tex"
+TEMP_FOLDER = "/tmp"
+TRASH_EXTENSIONS = [".aux", ".out", ".log"]
+OLD1 = r"\usepackage[utf8x]{inputenc}"
+NEW1 = r"""
+    \usepackage[utf8x]{inputenc}
+    \usepackage[T1,T2A]{fontenc}
+    \usepackage[russian,english]{babel}
+"""
+REPLACE = [(OLD1, NEW1)]
+HELP = """
+This script is aimed at correctly converting .ipynb to .pdf files.
+You may use it via 
+# ipynb2pdf Solution.ipynb
+To get .pdf in the same directory
+"""
+
 commit_name = ' '.join(sys.argv[1:])
 if len(commit_name) == 0:
     commit_name = 'auto upload'
@@ -18,9 +35,23 @@ for path_dir in path_dirs:
                      os.path.isfile(os.path.join(os.getcwd(), name)) and not name.startswith(".") and name.endswith(
                          ".ipynb")]
     for jupyter_file in jupyter_files:
-        os.system(f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_file[:-6]}')
+        jupyter_name = jupyter_file[:-6]
+        os.system(f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_name}')
+        os.system(f'jupyter nbconvert {jupyter_file} --to latex --output {jupyter_name}.tex')
+        os.remove(f'{jupyter_name}.log')
+        os.remove(f'{jupyter_name}.aux')
+        os.remove(f'{jupyter_name}.out')
+        os.remove(f'{jupyter_name}.tex')
+        """
+        
+        
+        
+        
+        """
+
+
         # os.system(f'jupyter nbconvert {jupyter_file} --to pdf --output \"{f"{jupyter_file[:-6]} - Отчёт Жидков А.А. R4136с "}\"')
-        os.system(f'pandoc -V lang=russian -o {jupyter_file[:-6]}.pdf -f markdown --pdf-engine=pdflatex {jupyter_file[:-6]}.md')
+        # os.system(f'pandoc -V lang=russian -o {jupyter_file[:-6]}.pdf -f markdown --pdf-engine=pdflatex {jupyter_file[:-6]}.md')
         # pandoc MANUAL.txt --pdf-engine=xelatex -o example13.pdf  --pdf-engine=pdflatex
 
     os.system(f'git reset')
