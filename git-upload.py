@@ -17,10 +17,20 @@ NEW = [
 
 
 def make_title(filetext: str, lab_name):
+    with open(f'{lab_name}.md', 'r', encoding="utf-8") as file:
+        header = file.readline()
+        header = header.replace("#", "")
+        header = header.strip()
+    subject = "По предмету \"Киберфизические системы и технологии\""
+    author = "Жидков Артемий Андреевич"
+    group = "группа R4136с"
+    teacher = "Афанасьев Максим Яковлевич"
+    date = "сентябрь 2022"
+
     title_find = r"\maketitle"
-    title_text = r"\title{" + "Лабораторная работа № 1" + r"}" + "\n"
-    title_text = title_text + r"    \author{" + "Жидков Артемий Андреевич \\\\ группа R4136с" + r"}" + "\n"
-    title_text = title_text + r"    \date{" + "сентябрь 2022 \\\\ 231231adwa" + r"}" + "\n"
+    title_text = r"\title{" + f"{header} \\\\ {subject}" + r"}" + "\n"
+    title_text = title_text + r"    \author{" + f"{author} \\\\ {group}" + r"}" + "\n"
+    title_text = title_text + r"    \date{" + f"{teacher} \\\\ {date}" + r"}" + "\n"
     title_text = title_text + r"    \maketitle" + "\n"
 
     print(title_text)
