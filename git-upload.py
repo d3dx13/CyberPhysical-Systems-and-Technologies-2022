@@ -16,11 +16,7 @@ NEW = [
 ]
 
 
-def make_title(filetext: str, lab_name):
-    with open(f'{lab_name}.md', 'r', encoding="utf-8") as file:
-        header = file.readline()
-        header = header.replace("#", "")
-        header = header.strip()
+def make_title(filetext: str, header):
     subject = "По предмету \"Киберфизические системы и технологии\""
     author = "работу выполнил: Жидков Артемий Андреевич"
     group = "группа: R4136с"
@@ -59,19 +55,27 @@ for path_dir in path_dirs:
         subprocess.call((f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_name}'))
         subprocess.call((f'jupyter nbconvert {jupyter_file} --to latex --output {jupyter_name}.tex'))
 
+        with open(f'{jupyter_name}.md', 'r', encoding="utf-8") as file:
+            header = file.readline()
+            header = header.replace("#", "")
+            header = header.strip()
+
         with open(f'{jupyter_name}.tex', 'r', encoding="utf-8") as file:
             filedata = file.read()
         for iter in range(min(len(OLD), len(NEW))):
             filedata = filedata.replace(OLD[iter], NEW[iter])
-        filedata = make_title(filedata, lab_name=jupyter_name)
+        filedata = make_title(filedata, header)
         with open(f'{jupyter_name}.tex', 'w', encoding="utf-8") as file:
             file.write(filedata)
 
         subprocess.call((f'pdflatex -interaction=batchmode {jupyter_name}.tex -output-format pdf'))
-        os.remove(f"{jupyter_file[:-6]} - Отчёт Жидков А.А. R4136с.pdf")
-        os.rename(f'{jupyter_name}.pdf', f"{jupyter_file[:-6]} - Отчёт Жидков А.А. R4136с.pdf")
+        try:
+            os.remove(f"{header} - Отчёт Жидков А.А. R4136с.pdf")
+        except:
+            pass
+        os.rename(f'{jupyter_name}.pdf', f"{header} - Отчёт Жидков А.А. R4136с.pdf")
 
-        # os.remove(f'{jupyter_name}.tex')
+        os.remove(f'{jupyter_name}.tex')
         os.remove(f'{jupyter_name}.log')
         os.remove(f'{jupyter_name}.aux')
         os.remove(f'{jupyter_name}.out')
