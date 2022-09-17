@@ -40,7 +40,7 @@ title = ["time", "current", "voltage"]
 dataset_dict = dict(zip(title, dataset))
 ```
 
-    Dataset: testLab1Var86.csv
+    Dataset: testLab1Var96.csv
     
 
 ### 3. Нарисовать графики тока и напряжения.
@@ -63,7 +63,7 @@ time_interval = (time_interval, time_interval + time_period)
 print(f"Временной интервал {time_interval}")
 ```
 
-    Временной интервал (33.54811658365843, 33.64811658365843)
+    Временной интервал (83.40579441071259, 83.50579441071258)
     
 
 
@@ -171,12 +171,15 @@ $$
 $$
 s = \dfrac{z - 1}{T_d}
 $$
+
 $$
 G_d(z) = G_c(s=\dfrac{z - 1}{T_s}) = \dfrac{1}{L \times (\dfrac{z - 1}{T_s} + \dfrac{R}{L})}
 $$
+
 $$
 G_d(z_i=z^{-1}) = \dfrac{T_d}{R \times T_d - L + L \times z_i^{-1}}
 $$
+
 $$
 G_d(z_i) = \dfrac{T_d \times z_i}{L - L \times z_i + R \times T_d \times z_i}
 $$
@@ -186,23 +189,28 @@ $$
 $$
 G_d(z=z_i^{-1}) = \dfrac{T_d \times z^{-1}}{L - L \times z^{-1} + R \times T_d \times z^{-1}} = \dfrac{i(z)}{u(z)}
 $$
+
 $$
 T_d \times u(z)*z^{-1} = i(z)*(L - L \times z^{-1} + R \times T_d \times z^{-1})
 $$
+
 $$
 T_d \times u(z)*z^{-1} = i(z)*L - i(z)*L \times z^{-1} + i(z)*R \times T_d \times z^{-1}
 $$
+
 $$
 i(z)*L = T_d \times u(z)*z^{-1} + i(z)*L \times z^{-1} - i(z)*R \times T_d \times z^{-1}
 $$
+
 $$
 i(z) = u(z)*z^{-1} \times (\dfrac{T_d}{L}) + i(z)*z^{-1} \times (1 - \dfrac{R \times T_d}{L})
 $$
+
 $$
 i(z) = u(z)*z^{-1} \times (\dfrac{T_d}{L}) - i(z)*z^{-1} \times (\dfrac{R \times T_d - L}{L})
 $$
 
-В дискретной системе операция $z^{-1}$ - сть задержка на один такт, следовательно, можно рассчитать значение силы тока в конкретны момент:
+В дискретной системе операция $z^{-1}$ - есть задержка на один такт, следовательно, можно рассчитать значение силы тока в конкретны момент:
 
 $$
 i_{k} = u_{k-1} \times (\dfrac{T_d}{L}) - i_{k-1} \times (\dfrac{R \times T_d - L}{L})
@@ -283,8 +291,8 @@ print(X_tensor.shape)
 print(torch.mm(X_psi, X_tensor))
 ```
 
-    tensor([[1.0000e+00, 4.8366e-19],
-            [1.7781e-15, 1.0000e+00]], device='cuda:0', dtype=torch.float64)
+    tensor([[ 1.0000e+00, -2.1176e-20],
+            [ 2.3800e-15,  1.0000e+00]], device='cuda:0', dtype=torch.float64)
     
 
 $X \times K = Y \to K = X^{+} \times Y$, где $X^{+}$ - матрица, псевдообратная к $X$
@@ -295,8 +303,8 @@ K_approx = torch.mm(X_psi, Y_tensor)
 print(K_approx)
 ```
 
-    tensor([[0.0011],
-            [0.9930]], device='cuda:0', dtype=torch.float64)
+    tensor([[2.0978e-04],
+            [9.9348e-01]], device='cuda:0', dtype=torch.float64)
     
 
 
@@ -311,8 +319,8 @@ print('Вычисленное значение R = ', R.numpy()[0], ' Ом')
 print('Вычисленное значение L = ', L.numpy()[0], ' Гн')
 ```
 
-    Вычисленное значение R =  6.542603528806645  Ом
-    Вычисленное значение L =  0.9341641169476622  Гн
+    Вычисленное значение R =  31.062180309568532  Ом
+    Вычисленное значение L =  4.766968120050001  Гн
     
 
 Также можно посчитать те же данные согласно формулам из исходной лабораторной работы, которые я считаю не самыми корректными
@@ -327,8 +335,8 @@ print('R = ', R.numpy()[0], ' Ohm')
 print('L = ', L.numpy()[0], ' Hn')
 ```
 
-    R =  6.542603528806628  Ohm
-    L =  0.9308889832166779  Hn
+    R =  31.06218030956877  Ohm
+    L =  4.751420107614852  Hn
     
 
 ### 5 Рассчитать средние значения и стандартное отклонение.
@@ -350,7 +358,7 @@ sigma_Y = sigma_Y.cpu().numpy()[0][0]
 print(sigma_Y)
 ```
 
-    0.0007429693285765195
+    0.0002188388525334595
     
 
 
