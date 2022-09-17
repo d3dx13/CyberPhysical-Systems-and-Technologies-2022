@@ -19,7 +19,7 @@ for path_dir in path_dirs:
                          ".ipynb")]
     for jupyter_file in jupyter_files:
         os.system(f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_file[:-6]}')
-        os.system(f'pandoc {jupyter_file} --pdf-engine=xelatex --output {jupyter_file[:-6]}.pdf')
+        os.system(f'pandoc {jupyter_file} --pdf-engine=miktex --output {jupyter_file[:-6]}.pdf')
         # pandoc MANUAL.txt --pdf-engine=xelatex -o example13.pdf
 
     os.system(f'git reset')
