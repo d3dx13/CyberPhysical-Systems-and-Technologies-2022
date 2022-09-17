@@ -37,12 +37,9 @@ for path_dir in path_dirs:
                          ".ipynb")]
     for jupyter_file in jupyter_files:
         jupyter_name = jupyter_file[:-6]
-        p = subprocess.Popen((f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_name}'))
-        p.wait()
-        p = subprocess.Popen((f'jupyter nbconvert {jupyter_file} --to latex --output {jupyter_name}.tex'))
-        p.wait()
-        p = subprocess.Popen((f'pdflatex -interaction=batchmode {jupyter_name}.tex -output-format pdf'))
-        p.wait()
+        subprocess.call((f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_name}'))
+        subprocess.call((f'jupyter nbconvert {jupyter_file} --to latex --output {jupyter_name}.tex'))
+        subprocess.call((f'pdflatex -interaction=batchmode {jupyter_name}.tex -output-format pdf'))
         # os.rename(f'{jupyter_name}.pdf', f"{jupyter_name} - Отчёт Жидков А.А. R4136с.pdf")
 
         os.remove(f'{jupyter_name}.tex')
