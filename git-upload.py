@@ -17,8 +17,7 @@ NEW = [
 
 
 def make_title(filetext: str, lab_name):
-    title_find = r"""\maketitle
-    """
+    title_find = r"\maketitle"
     title_text = f"\maketitle\n"
     title_text = title_text + r"\title{" + "Лабораторная работа № 1" + r"}" + "\n"
     title_text = title_text + r"\author{" + "Жидков Артемий Андреевич \\\\ группа R4136с" + r"}" + "\n"
