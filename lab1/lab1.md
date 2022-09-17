@@ -56,29 +56,22 @@ time_interval = (time_interval, time_interval + time_period)
 print(f"Временной интервал {time_interval}")
 ```
 
-    Временной интервал (46.33177893047615, 46.43177893047615)
+    Временной интервал (1.8391630218611739, 1.939163021861174)
     
 
 
 ```python
 plt.plot(dataset_dict["time"], dataset_dict["current"])
 plt.xlim(time_interval)
-plt.grid()
 plt.xlabel('Время, с')
 plt.ylabel('Сила Тока, А')
 plt.legend(["Сила Тока в моторе"])
+plt.grid()
 ```
 
 
-
-
-    <matplotlib.legend.Legend at 0x18249ad7be0>
-
-
-
-
     
-![png](lab1_files/lab1_7_1.png)
+![png](lab1_files/lab1_7_0.png)
     
 
 
@@ -86,22 +79,15 @@ plt.legend(["Сила Тока в моторе"])
 ```python
 plt.plot(dataset_dict["time"], dataset_dict["voltage"])
 plt.xlim(time_interval)
-plt.grid()
 plt.xlabel('Время, с')
 plt.ylabel('Напряжение, В')
 plt.legend(["Напряжение на моторе"])
+plt.grid()
 ```
 
 
-
-
-    <matplotlib.legend.Legend at 0x18249680c10>
-
-
-
-
     
-![png](lab1_files/lab1_8_1.png)
+![png](lab1_files/lab1_8_0.png)
     
 
 
@@ -223,32 +209,21 @@ print(sigma_Y)
 Y_predict = torch.mm(X_tensor, K_approx)
 Y_predict = Y_predict.cpu().numpy()
 
-print(Y_predict.T[0].shape)
-print(dataset_dict["current"][1:].shape)
+# print(Y_predict.T[0].shape)
+# print(dataset_dict["current"][1:].shape)
 
 plt.plot(dataset_dict["time"][1:], dataset_dict["current"][1:], 'b')
-plt.plot(dataset_dict["time"][1:], Y_predict.T[0], 'r:')
+plt.plot(dataset_dict["time"][1:], Y_predict.T[0], 'r--')
 plt.xlim(time_interval)
-plt.grid()
 plt.xlabel('Время, с')
 plt.ylabel('Сила Тока, А')
 plt.legend(["Реальное значение тока", "Предсказание модели"])
+plt.grid()
 ```
 
-    (100000,)
-    (100000,)
-    
-
-
-
-
-    <matplotlib.legend.Legend at 0x182499d5a20>
-
-
-
 
     
-![png](lab1_files/lab1_22_2.png)
+![png](lab1_files/lab1_22_0.png)
     
 
 
@@ -273,7 +248,7 @@ plt.legend(["Ошибка предсказания тока моделью", "С
 
 
 
-    <matplotlib.legend.Legend at 0x18249177fd0>
+    <matplotlib.legend.Legend at 0x18248ff23b0>
 
 
 
