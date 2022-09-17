@@ -2,13 +2,18 @@ import os
 import sys
 import subprocess
 
-OLD1 = r"\documentclass[11pt]{article}"
-NEW1 = r"""\documentclass[11pt]{article}
+OLD = [
+    r"\documentclass[11pt]{article}",
+
+]
+NEW = [
+    r"""\documentclass[11pt]{article}
     \usepackage[utf8]{inputenc}
     \usepackage[T1,T2A]{fontenc}
     \usepackage[russian]{babel}
-"""
-REPLACE = [(OLD1, NEW1)]
+""",
+
+]
 
 commit_name = ' '.join(sys.argv[1:])
 if len(commit_name) == 0:
@@ -33,14 +38,16 @@ for path_dir in path_dirs:
 
         with open(f'{jupyter_name}.tex', 'r', encoding="utf-8") as file:
             filedata = file.read()
-        filedata = filedata.replace(OLD1, NEW1)
+        for iter in range(min(len(OLD), len(NEW))):
+            filedata = filedata.replace(OLD[iter], NEW[iter])
         with open(f'{jupyter_name}.tex', 'w', encoding="utf-8") as file:
             file.write(filedata)
 
         subprocess.call((f'pdflatex -interaction=batchmode {jupyter_name}.tex -output-format pdf'))
+        os.remove(f"{jupyter_file[:-6]} - Отчёт Жидков А.А. R4136с.pdf")
         os.rename(f'{jupyter_name}.pdf', f"{jupyter_file[:-6]} - Отчёт Жидков А.А. R4136с.pdf")
 
-        os.remove(f'{jupyter_name}.tex')
+        # os.remove(f'{jupyter_name}.tex')
         os.remove(f'{jupyter_name}.log')
         os.remove(f'{jupyter_name}.aux')
         os.remove(f'{jupyter_name}.out')
