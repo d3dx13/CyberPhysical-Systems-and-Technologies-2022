@@ -22,10 +22,10 @@ def make_title(filetext: str, lab_name):
         header = header.replace("#", "")
         header = header.strip()
     subject = "По предмету \"Киберфизические системы и технологии\""
-    author = "Жидков Артемий Андреевич"
-    group = "группа R4136с"
-    teacher = "Афанасьев Максим Яковлевич"
-    date = "сентябрь 2022"
+    author = "работу выполнил: Жидков Артемий Андреевич"
+    group = "группа: R4136с"
+    teacher = "преподаватель: Афанасьев Максим Яковлевич"
+    date = "дата: сентябрь 2022"
 
     title_find = r"\maketitle"
     title_text = r"\title{" + f"{header} \\\\ {subject}" + r"}" + "\n"
