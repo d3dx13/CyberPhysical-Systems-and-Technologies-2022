@@ -1,5 +1,6 @@
 import os
 import sys
+import subprocess
 
 TEMP_TEX = "___o.tex"
 TEMP_FOLDER = "/tmp"
@@ -36,7 +37,8 @@ for path_dir in path_dirs:
                          ".ipynb")]
     for jupyter_file in jupyter_files:
         jupyter_name = jupyter_file[:-6]
-        os.system(f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_name}')
+        p = subprocess.Popen((f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_name}'))
+        p.wait()
         os.system(f'jupyter nbconvert {jupyter_file} --to latex --output {jupyter_name}.tex')
         os.system(f'pdflatex -interaction=batchmode {jupyter_name}.tex -output-format pdf')
         # os.rename(f'{jupyter_name}.pdf', f"{jupyter_name} - Отчёт Жидков А.А. R4136с.pdf")
