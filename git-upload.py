@@ -43,6 +43,7 @@ for path_dir in path_dirs:
         os.remove(f'{jupyter_name}.log')
         os.remove(f'{jupyter_name}.aux')
         os.remove(f'{jupyter_name}.out')
+        # os.rename(f'{jupyter_name}.pdf', f"{jupyter_name} - Отчёт Жидков А.А. R4136с.pdf")
 
 
         # os.system(f'jupyter nbconvert {jupyter_file} --to pdf --output \"{f"{jupyter_file[:-6]} - Отчёт Жидков А.А. R4136с "}\"')
