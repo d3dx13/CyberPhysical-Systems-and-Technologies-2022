@@ -42,9 +42,8 @@ print(images_test.shape)
 print(numbers_test.shape)
 
 
-number = 1000
-print(images_train[number, :, :])
-plt.imshow(images_train[number, :, :], cmap='gray', vmin=0, vmax=1)
+number = 4000
+plt.imshow(images_train[number, :, :], cmap=plt.cm.binary, vmin=0, vmax=1)
 ```
 
     (60000, 785)
@@ -198,7 +197,7 @@ plt.imshow(images_train[number, :, :], cmap='gray', vmin=0, vmax=1)
 
 
 
-    <matplotlib.image.AxesImage at 0x1bf1ef474f0>
+    <matplotlib.image.AxesImage at 0x1bf1efa4190>
 
 
 
