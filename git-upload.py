@@ -7,7 +7,7 @@ OLD = [
 
 ]
 NEW = [
-    r"""\documentclass[11pt]{article}
+    r"""\documentclass[12pt]{report}
     \usepackage[utf8]{inputenc}
     \usepackage[T1,T2A]{fontenc}
     \usepackage[russian]{babel}
