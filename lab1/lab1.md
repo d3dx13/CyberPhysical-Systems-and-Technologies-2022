@@ -133,7 +133,19 @@ $С_{\omega}$ - коэффициент связи между скоростью 
 
 $С_М$ - коэффициент связи между током якоря и электромагнитным моментом.
 
+Согласно упрощению в данной работе двигатель застопорен, следовательно:
 
+$$
+\omega = 0 \to e = C_{\omega} \times \Phi \times \omega = 0 \to u = R \times i + L \times \dfrac{di}{t}
+$$
+
+Тогда можно получить уравнение электрической составляющей двигателя:
+
+$$
+L \times \dfrac{di}{t} = u  - R \times i
+\\
+\dfrac{di}{t} = \dfrac{u}{L}  - \dfrac{R}{L} \times i
+$$
 
 Y = K*X
 
@@ -259,7 +271,7 @@ plt.grid()
 
 
     
-![png](lab1_files/lab1_22_0.png)
+![png](lab1_files/lab1_23_0.png)
     
 
 
@@ -279,7 +291,7 @@ plt.grid()
 
 
     
-![png](lab1_files/lab1_23_0.png)
+![png](lab1_files/lab1_24_0.png)
     
 
 
