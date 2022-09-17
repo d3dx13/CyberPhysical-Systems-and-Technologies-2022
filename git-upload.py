@@ -38,15 +38,12 @@ for path_dir in path_dirs:
             file.write(filedata)
 
         subprocess.call((f'pdflatex -interaction=batchmode {jupyter_name}.tex -output-format pdf'))
+        os.rename(f'{jupyter_name}.pdf', f"{jupyter_file[:-6]} - Отчёт Жидков А.А. R4136с.pdf")
 
         os.remove(f'{jupyter_name}.tex')
         os.remove(f'{jupyter_name}.log')
         os.remove(f'{jupyter_name}.aux')
         os.remove(f'{jupyter_name}.out')
-
-        # os.system(f'jupyter nbconvert {jupyter_file} --to pdf --output \"{f"{jupyter_file[:-6]} - Отчёт Жидков А.А. R4136с "}\"')
-        # os.system(f'pandoc -V lang=russian -o {jupyter_file[:-6]}.pdf -f markdown --pdf-engine=pdflatex {jupyter_file[:-6]}.md')
-        # pandoc MANUAL.txt --pdf-engine=xelatex -o example13.pdf  --pdf-engine=pdflatex
 
     os.system(f'git reset')
     os.system(f'git add .')
