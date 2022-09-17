@@ -23,8 +23,8 @@ def make_title(filetext: str, lab_name):
     title_text = title_text + r"\author{" + "Жидков Артемий Андреевич \\\\ группа R4136с" + r"}" + "\n"
     title_text = title_text + r"\date{" + "сентябрь 2022 \\\\ 231231adwa" + r"}" + "\n"
 
-    print(filetext.find(title_find), title_text)
-    filetext.replace(title_find, title_text)
+    print(title_text)
+    filetext = filetext.replace(title_find, title_text)
     return filetext
 
 
