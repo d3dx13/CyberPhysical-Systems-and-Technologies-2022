@@ -15,6 +15,20 @@ NEW = [
 
 ]
 
+
+def make_title(filetext: str, lab_name):
+    title_find = r"""\maketitle
+    """
+    title_text = f"\maketitle\n"
+    title_text = title_text + r"\title{" + "Лабораторная работа № 1" + r"}" + "\n"
+    title_text = title_text + r"\author{" + "Жидков Артемий Андреевич \\\\ группа R4136с" + r"}" + "\n"
+    title_text = title_text + r"\date{" + "сентябрь 2022 \\\\ 231231adwa" + r"}" + "\n"
+
+    print(title_text)
+    filetext.replace(title_find, title_text)
+    return filetext
+
+
 commit_name = ' '.join(sys.argv[1:])
 if len(commit_name) == 0:
     commit_name = 'auto upload'
@@ -40,6 +54,7 @@ for path_dir in path_dirs:
             filedata = file.read()
         for iter in range(min(len(OLD), len(NEW))):
             filedata = filedata.replace(OLD[iter], NEW[iter])
+        filedata = make_title(filedata, lab_name=jupyter_name)
         with open(f'{jupyter_name}.tex', 'w', encoding="utf-8") as file:
             file.write(filedata)
 
