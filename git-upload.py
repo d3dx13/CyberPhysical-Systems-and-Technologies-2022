@@ -5,7 +5,7 @@ import subprocess
 OLD1 = r"\documentclass[11pt]{article}"
 NEW1 = r"""
 \documentclass[11pt]{article}
-    \usepackage[utf8x]{inputenc}
+    \usepackage[utf8]{inputenc}
     \usepackage[T1,T2A]{fontenc}
     \usepackage[russian,english]{babel}
 """
@@ -40,7 +40,7 @@ for path_dir in path_dirs:
 
         subprocess.call((f'pdflatex -interaction=batchmode {jupyter_name}.tex -output-format pdf'))
 
-        # os.remove(f'{jupyter_name}.tex')
+        os.remove(f'{jupyter_name}.tex')
         os.remove(f'{jupyter_name}.log')
         os.remove(f'{jupyter_name}.aux')
         os.remove(f'{jupyter_name}.out')
