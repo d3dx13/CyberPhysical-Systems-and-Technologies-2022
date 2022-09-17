@@ -345,7 +345,7 @@ print('L = ', L.numpy()[0], ' Hn')
 
 Тогда Сумма квадратов ошибки будет $S(K) = \sum e_{i}^{2} = e^{T} \times e = (Y - X \times K)^{T} \times (Y - X \times K)$
 
-А среднеквадратичное отклонение $ \sigma_{Y} = \sqrt{\dfrac{S(K)}{n}} $
+А среднеквадратичное отклонение $ \sigma = \sqrt{\dfrac{S(K)}{n}} $
 
 
 ```python
