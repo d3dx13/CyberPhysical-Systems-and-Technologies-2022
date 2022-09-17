@@ -393,23 +393,15 @@
 
     
     \hypertarget{ux43bux430ux431ux43eux440ux430ux442ux43eux440ux43dux430ux44f-ux440ux430ux431ux43eux442ux430-1-ux432ux432ux435ux434ux435ux43dux438ux435-ux432-ux430ux43dux430ux43bux438ux437-ux434ux430ux43dux43dux44bux445-ux441-ux43fux43eux43cux43eux449ux44cux44e-python}{%
-\section{Лабораторная работа №1, Введение в анализ данных с помощью
+\section{Лабораторная работа №1: Введение в анализ данных с помощью
 Python}\label{ux43bux430ux431ux43eux440ux430ux442ux43eux440ux43dux430ux44f-ux440ux430ux431ux43eux442ux430-1-ux432ux432ux435ux434ux435ux43dux438ux435-ux432-ux430ux43dux430ux43bux438ux437-ux434ux430ux43dux43dux44bux445-ux441-ux43fux43eux43cux43eux449ux44cux44e-python}}
-
-\hypertarget{ux444ux438ux43e-ux436ux438ux434ux43aux43eux432-ux430ux440ux442ux435ux43cux438ux439-ux430ux43dux434ux440ux435ux435ux432ux438ux447}{%
-\section{ФИО: Жидков Артемий
-Андреевич}\label{ux444ux438ux43e-ux436ux438ux434ux43aux43eux432-ux430ux440ux442ux435ux43cux438ux439-ux430ux43dux434ux440ux435ux435ux432ux438ux447}}
-
-\hypertarget{ux433ux440ux443ux43fux43fux430-r4136ux441}{%
-\section{группа:
-R4136с}\label{ux433ux440ux443ux43fux43fux430-r4136ux441}}
 
     \hypertarget{ux438ux43cux43fux43eux440ux442ux438ux440ux43eux432ux430ux442ux44c-ux431ux438ux431ux43bux438ux43eux442ux435ux43aux438-ux432-python.}{%
 \subsubsection{1. Импортировать библиотеки в
 Python.}\label{ux438ux43cux43fux43eux440ux442ux438ux440ux43eux432ux430ux442ux44c-ux431ux438ux431ux43bux438ux43eux442ux435ux43aux438-ux432-python.}}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{84}{\boxspacing}
+\prompt{In}{incolor}{116}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
 \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
@@ -436,7 +428,7 @@ minor=6, total\_memory=8191MB, multi\_processor\_count=48)
 данных.}\label{ux437ux430ux433ux440ux443ux437ux43aux430-ux438-ux43fux43eux434ux433ux43eux442ux43eux432ux43aux430-ux434ux430ux43dux43dux44bux445.}}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{85}{\boxspacing}
+\prompt{In}{incolor}{117}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{name} \PY{o}{=} \PY{n}{random}\PY{o}{.}\PY{n}{choice}\PY{p}{(}\PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dataset}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
 
@@ -454,7 +446,7 @@ minor=6, total\_memory=8191MB, multi\_processor\_count=48)
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-Dataset: testLab1Var56.csv
+Dataset: testLab1Var58.csv
     \end{Verbatim}
 
     \hypertarget{ux43dux430ux440ux438ux441ux43eux432ux430ux442ux44c-ux433ux440ux430ux444ux438ux43aux438-ux442ux43eux43aux430-ux438-ux43dux430ux43fux440ux44fux436ux435ux43dux438ux44f.}{%
@@ -465,7 +457,7 @@ Dataset: testLab1Var56.csv
 случайный диапазон заданного размера, установив лимиты на данные.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{86}{\boxspacing}
+\prompt{In}{incolor}{118}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
 \PY{l+s+sd}{Размер интервала}
@@ -475,7 +467,7 @@ Dataset: testLab1Var56.csv
 \end{tcolorbox}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{87}{\boxspacing}
+\prompt{In}{incolor}{119}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{time\PYZus{}interval} \PY{o}{=} \PY{n}{random}\PY{o}{.}\PY{n}{random}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{dataset\PYZus{}dict}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{time}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{time\PYZus{}period}\PY{p}{)}
 \PY{n}{time\PYZus{}interval} \PY{o}{=} \PY{p}{(}\PY{n}{time\PYZus{}interval}\PY{p}{,} \PY{n}{time\PYZus{}interval} \PY{o}{+} \PY{n}{time\PYZus{}period}\PY{p}{)}
@@ -485,11 +477,11 @@ Dataset: testLab1Var56.csv
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-Временной интервал (42.89388613861019, 42.99388613861019)
+Временной интервал (91.8224162376103, 91.92241623761029)
     \end{Verbatim}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{88}{\boxspacing}
+\prompt{In}{incolor}{120}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{dataset\PYZus{}dict}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{time}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{dataset\PYZus{}dict}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{current}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
 \PY{n}{plt}\PY{o}{.}\PY{n}{xlim}\PY{p}{(}\PY{n}{time\PYZus{}interval}\PY{p}{)}
@@ -506,7 +498,7 @@ Dataset: testLab1Var56.csv
     { \hspace*{\fill} \\}
     
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{89}{\boxspacing}
+\prompt{In}{incolor}{121}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{dataset\PYZus{}dict}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{time}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{dataset\PYZus{}dict}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{voltage}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
 \PY{n}{plt}\PY{o}{.}\PY{n}{xlim}\PY{p}{(}\PY{n}{time\PYZus{}interval}\PY{p}{)}
@@ -677,7 +669,7 @@ Y = X * K
     
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{90}{\boxspacing}
+\prompt{In}{incolor}{122}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{X} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{concatenate}\PY{p}{(}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{dataset\PYZus{}dict}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{voltage}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{dataset\PYZus{}dict}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{current}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{p}{]}\PY{p}{)}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
 \PY{n}{Y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{dataset\PYZus{}dict}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{current}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{p}{]}\PY{p}{)}\PY{p}{)}
@@ -712,7 +704,7 @@ Y = X * K
 Наименьших Квадратов}:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{91}{\boxspacing}
+\prompt{In}{incolor}{123}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{k}{def} \PY{n+nf}{get\PYZus{}pseudoinverse}\PY{p}{(}\PY{n}{matrix}\PY{p}{)}\PY{p}{:}
     \PY{n}{matrix\PYZus{}svd} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{svd}\PY{p}{(}\PY{n}{matrix}\PY{p}{)}
@@ -726,7 +718,7 @@ Y = X * K
 \end{tcolorbox}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{92}{\boxspacing}
+\prompt{In}{incolor}{124}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{X\PYZus{}psi} \PY{o}{=} \PY{n}{get\PYZus{}pseudoinverse}\PY{p}{(}\PY{n}{X\PYZus{}tensor}\PY{p}{)}
 
@@ -744,22 +736,22 @@ torch.Size([100000, 2])
 должна быть матрица, близкая к единичной:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{93}{\boxspacing}
+\prompt{In}{incolor}{125}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n+nb}{print}\PY{p}{(}\PY{n}{torch}\PY{o}{.}\PY{n}{mm}\PY{p}{(}\PY{n}{X\PYZus{}psi}\PY{p}{,} \PY{n}{X\PYZus{}tensor}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-tensor([[ 1.0000e+00,  4.9975e-19],
-        [-1.2334e-15,  1.0000e+00]], device='cuda:0', dtype=torch.float64)
+tensor([[ 1.0000e+00, -2.0879e-19],
+        [-3.1728e-15,  1.0000e+00]], device='cuda:0', dtype=torch.float64)
     \end{Verbatim}
 
     \(X \times K = Y \to K = X^{+} \times Y\), где \(X^{+}\) - матрица,
 псевдообратная к \(X\)
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{94}{\boxspacing}
+\prompt{In}{incolor}{126}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{K\PYZus{}approx} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{mm}\PY{p}{(}\PY{n}{X\PYZus{}psi}\PY{p}{,} \PY{n}{Y\PYZus{}tensor}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{n}{K\PYZus{}approx}\PY{p}{)}
@@ -767,12 +759,12 @@ tensor([[ 1.0000e+00,  4.9975e-19],
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-tensor([[8.9280e-04],
-        [9.9093e-01]], device='cuda:0', dtype=torch.float64)
+tensor([[9.6697e-04],
+        [9.9345e-01]], device='cuda:0', dtype=torch.float64)
     \end{Verbatim}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{95}{\boxspacing}
+\prompt{In}{incolor}{127}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{K} \PY{o}{=} \PY{n}{K\PYZus{}approx}\PY{o}{.}\PY{n}{cpu}\PY{p}{(}\PY{p}{)}
 
@@ -786,15 +778,15 @@ tensor([[8.9280e-04],
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-Вычисленное значение R =  10.158316105496112  Ом
-Вычисленное значение L =  1.1200701242066806  Гн
+Вычисленное значение R =  6.776270437684584  Ом
+Вычисленное значение L =  1.0341568082072874  Гн
     \end{Verbatim}
 
     Также можно посчитать те же данные согласно формулам из исходной
 лабораторной работы, которые я считаю не самыми корректными
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{96}{\boxspacing}
+\prompt{In}{incolor}{128}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{R} \PY{o}{=} \PY{l+m+mi}{1} \PY{o}{/} \PY{n}{K}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{K}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
 \PY{n}{T} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{Td} \PY{o}{/} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{K}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
@@ -806,8 +798,8 @@ tensor([[8.9280e-04],
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-R =  10.158316105496143  Ohm
-L =  1.1149832536880728  Hn
+R =  6.776270437684538  Ohm
+L =  1.0307649607124723  Hn
     \end{Verbatim}
 
     \hypertarget{ux440ux430ux441ux441ux447ux438ux442ux430ux442ux44c-ux441ux440ux435ux434ux43dux438ux435-ux437ux43dux430ux447ux435ux43dux438ux44f-ux438-ux441ux442ux430ux43dux434ux430ux440ux442ux43dux43eux435-ux43eux442ux43aux43bux43eux43dux435ux43dux438ux435.}{%
@@ -831,7 +823,7 @@ S(K) = \sum e_{i}^{2} = e^{T} \times e = (Y - X \times K)^{T} \times (Y - X \tim
 \]
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{97}{\boxspacing}
+\prompt{In}{incolor}{129}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{e2\PYZus{}Y} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{mm}\PY{p}{(}\PY{n}{Y\PYZus{}tensor}\PY{o}{.}\PY{n}{T} \PY{o}{\PYZhy{}} \PY{n}{torch}\PY{o}{.}\PY{n}{mm}\PY{p}{(}\PY{n}{X\PYZus{}tensor}\PY{p}{,} \PY{n}{K\PYZus{}approx}\PY{p}{)}\PY{o}{.}\PY{n}{T}\PY{p}{,} \PY{n}{Y\PYZus{}tensor} \PY{o}{\PYZhy{}} \PY{n}{torch}\PY{o}{.}\PY{n}{mm}\PY{p}{(}\PY{n}{X\PYZus{}tensor}\PY{p}{,} \PY{n}{K\PYZus{}approx}\PY{p}{)}\PY{p}{)}
 \PY{n}{sigma2\PYZus{}Y} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{divide}\PY{p}{(}\PY{n}{e2\PYZus{}Y}\PY{p}{,} \PY{n}{Y\PYZus{}tensor}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
@@ -844,11 +836,11 @@ S(K) = \sum e_{i}^{2} = e^{T} \times e = (Y - X \times K)^{T} \times (Y - X \tim
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-0.00042367658795242503
+0.0010423681281380491
     \end{Verbatim}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{98}{\boxspacing}
+\prompt{In}{incolor}{130}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{Y\PYZus{}predict} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{mm}\PY{p}{(}\PY{n}{X\PYZus{}tensor}\PY{p}{,} \PY{n}{K\PYZus{}approx}\PY{p}{)}
 \PY{n}{Y\PYZus{}predict} \PY{o}{=} \PY{n}{Y\PYZus{}predict}\PY{o}{.}\PY{n}{cpu}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{numpy}\PY{p}{(}\PY{p}{)}
@@ -877,7 +869,7 @@ S(K) = \sum e_{i}^{2} = e^{T} \times e = (Y - X \times K)^{T} \times (Y - X \tim
 между реальным значением Y и его предсказанием:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{99}{\boxspacing}
+\prompt{In}{incolor}{131}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{c+c1}{\PYZsh{} print(Y\PYZus{}predict.T[0].shape)}
 \PY{c+c1}{\PYZsh{} print(dataset\PYZus{}dict[\PYZdq{}current\PYZdq{}][1:].shape)}
