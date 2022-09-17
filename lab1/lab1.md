@@ -40,7 +40,7 @@ title = ["time", "current", "voltage"]
 dataset_dict = dict(zip(title, dataset))
 ```
 
-    Dataset: testLab1Var97.csv
+    Dataset: testLab1Var11.csv
     
 
 ### 3. Нарисовать графики тока и напряжения.
@@ -63,7 +63,7 @@ time_interval = (time_interval, time_interval + time_period)
 print(f"Временной интервал {time_interval}")
 ```
 
-    Временной интервал (22.752990810035676, 22.852990810035678)
+    Временной интервал (28.65413982391623, 28.75413982391623)
     
 
 
@@ -150,7 +150,9 @@ $$
 
 $$
 L \times \dfrac{di}{t} = u  - R \times i
-\\
+$$
+
+$$
 \dfrac{di}{t} = \dfrac{u}{L}  - \dfrac{R}{L} \times i
 $$
 
@@ -220,11 +222,17 @@ $$
 
 $$
 Y_{n \times 1} = i_{1:end}
-\\
+$$
+
+$$
 X_{n \times 2} = [ i_{0:end-1} | u_{0:end-1} ]
-\\
+$$
+
+$$
 K_{2 \times 1} = [\dfrac{T_d}{L} | \dfrac{R \times T_d - L}{L}]^{T}
-\\
+$$
+
+$$
 Y = X * K
 $$
 
@@ -291,8 +299,8 @@ print(X_tensor.shape)
 print(torch.mm(X_psi, X_tensor))
 ```
 
-    tensor([[ 1.0000e+00, -3.5364e-20],
-            [-4.8225e-15,  1.0000e+00]], device='cuda:0', dtype=torch.float64)
+    tensor([[ 1.0000e+00,  3.7524e-19],
+            [-2.7756e-16,  1.0000e+00]], device='cuda:0', dtype=torch.float64)
     
 
 $X \times K = Y \to K = X^{+} \times Y$, где $X^{+}$ - матрица, псевдообратная к $X$
@@ -303,8 +311,8 @@ K_approx = torch.mm(X_psi, Y_tensor)
 print(K_approx)
 ```
 
-    tensor([[5.2037e-04],
-            [9.9327e-01]], device='cuda:0', dtype=torch.float64)
+    tensor([[6.9068e-04],
+            [9.9025e-01]], device='cuda:0', dtype=torch.float64)
     
 
 
@@ -319,8 +327,8 @@ print('Вычисленное значение R = ', R.numpy()[0], ' Ом')
 print('Вычисленное значение L = ', L.numpy()[0], ' Гн')
 ```
 
-    Вычисленное значение R =  12.931229837007896  Ом
-    Вычисленное значение L =  1.9217200199197824  Гн
+    Вычисленное значение R =  14.12081504070506  Ом
+    Вычисленное значение L =  1.4478479999320457  Гн
     
 
 Также можно посчитать те же данные согласно формулам из исходной лабораторной работы, которые я считаю не самыми корректными
@@ -335,25 +343,25 @@ print('R = ', R.numpy()[0], ' Ohm')
 print('L = ', L.numpy()[0], ' Hn')
 ```
 
-    R =  12.931229837007951  Ohm
-    L =  1.9152471293267064  Hn
+    R =  14.120815040705097  Ohm
+    L =  1.4407760594432346  Hn
     
 
 ### 5 Рассчитать средние значения и стандартное отклонение.
 
 Для нахождения ошибки между реальным значением $Y$ и его предсказанием моделью $X \times K$, можно просто посчитать их разность $e = Y - X \times K$
 
-Тогда Сумма квадратов ошибки будет $S(K) = \sum e_{i}^{2} = e^{T} \times e = (Y - X \times K)^{T} \times (Y - X \times K)$
+Тогда Сумма квадратов ошибки будет:
+
+$$
+S(K) = \sum e_{i}^{2} = e^{T} \times e = (Y - X \times K)^{T} \times (Y - X \times K)
+$$
 
 А среднеквадратичное отклонение:
 
 $$
 \sigma_{Y} = \sqrt {\dfrac {S(K)} {n} }
 $$
-
-$\sigma_{Y} = \sqrt {S(K)}$
-
-А среднеквадратичное отклонение $ \sigma_{Y} = \sqrt {\dfrac {S(K)} {n} } $
 
 
 ```python
@@ -366,7 +374,7 @@ sigma_Y = sigma_Y.cpu().numpy()[0][0]
 print(sigma_Y)
 ```
 
-    0.0003960487579449275
+    0.00030117986995266334
     
 
 
