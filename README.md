@@ -1,1 +1,4 @@
-# CyberPhysical-Systems-and-Technologies-2022
+# Киберфизические системы и технологии 2022
+
+[Оригинальный курс 2022 года](https://disk.yandex.ru/d/-CxIXKUHgydmsw)
+
