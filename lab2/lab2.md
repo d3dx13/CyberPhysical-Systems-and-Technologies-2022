@@ -31,8 +31,8 @@ print(mnist_train.shape)
 print(mnist_test.shape)
 ```
 
-    (60000, 785)
-    (10000, 785)
+    (3,)
+    (3,)
     
 
 
@@ -41,8 +41,13 @@ mnist_train[:,0]
 ```
 
 
+    ---------------------------------------------------------------------------
 
+    IndexError                                Traceback (most recent call last)
 
-    array([5., 0., 4., ..., 5., 6., 8.])
+    Cell In [24], line 1
+    ----> 1 mnist_train[:,0]
+    
 
+    IndexError: too many indices for array: array is 1-dimensional, but 2 were indexed
 
