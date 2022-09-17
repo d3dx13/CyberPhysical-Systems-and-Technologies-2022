@@ -45,7 +45,7 @@ dataset_dict = dict(zip(title, dataset))
 """
 Размер интервала
 """
-time_period = 0.5
+time_period = 0.1
 ```
 
 
@@ -56,7 +56,7 @@ time_interval = (time_interval, time_interval + time_period)
 print(f"Временной интервал {time_interval}")
 ```
 
-    Временной интервал (90.16691888920329, 90.66691888920329)
+    Временной интервал (46.33177893047615, 46.43177893047615)
     
 
 
@@ -66,12 +66,13 @@ plt.xlim(time_interval)
 plt.grid()
 plt.xlabel('Время, с')
 plt.ylabel('Сила Тока, А')
+plt.legend(["Сила Тока в моторе"])
 ```
 
 
 
 
-    Text(0, 0.5, 'Сила Тока, А')
+    <matplotlib.legend.Legend at 0x18249ad7be0>
 
 
 
@@ -88,12 +89,13 @@ plt.xlim(time_interval)
 plt.grid()
 plt.xlabel('Время, с')
 plt.ylabel('Напряжение, В')
+plt.legend(["Напряжение на моторе"])
 ```
 
 
 
 
-    Text(0, 0.5, 'Напряжение, В')
+    <matplotlib.legend.Legend at 0x18249680c10>
 
 
 
@@ -120,33 +122,12 @@ I(k) = K1 * U(k-1) + K2 * I(k-1)
 
 
 
-```python
-# TODO: remove
-
-torch.cuda.empty_cache()
-
-# torch.tensor([1., 2.], device=cuda)
-
-x = torch.randn(20000, 20000, device=cuda)
-w = torch.randn(20000, 20000, device=cuda)
-
-torch.mm(x, w)
-
-del x
-del w
-
-torch.cuda.empty_cache()
-```
 
 
 ```python
 X = np.transpose(np.concatenate([np.array([dataset_dict["voltage"], ]), np.array([dataset_dict["current"], ])], axis=0))
-
 Y = np.transpose(np.array([dataset_dict["current"], ]))
-```
 
-
-```python
 # X : n*k
 # K : k*1
 # X * K = Y
@@ -157,128 +138,170 @@ Y = Y[1:, :]  # I(k)
 
 print(X.shape)
 print(Y.shape)
+
+X_tensor = torch.tensor(X, device=cuda, dtype=torch.float64)
+Y_tensor = torch.tensor(Y, device=cuda, dtype=torch.float64)
 ```
 
     (100000, 2)
     (100000, 1)
     
 
+Функция нахождения [псевдообратной матрицы Moore–Penrose](https://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_inverse) через Сингулярное Разложение.
+
+Данная матрица позволяет аппроксимировать $Y = X \times K + e$ [Методом Наименьших Квадратов](https://www.gaussianwaves.com/2014/06/linear-models-least-squares-estimator-lse/amp/):
+
 
 ```python
-X_tensor = torch.tensor(X, device=cuda)
-Y_tensor = torch.tensor(Y, device=cuda)
+def get_pseudoinverse(matrix):
+    matrix_svd = torch.svd(matrix)
 
-X_svd = torch.svd(X_tensor)
+    matrix_psi = matrix_svd.V
+    matrix_psi = torch.mm(matrix_psi, torch.diag(1 / matrix_svd.S))
+    matrix_psi = torch.mm(matrix_psi, matrix_svd.U.T)
 
-X_psi = X_svd.V
-X_psi = torch.mm(X_psi, torch.diag(1 / X_svd.S))
-X_psi = torch.mm(X_psi, X_svd.U.T)
-
-"""
-X_tensor_alt = X_svd.U
-X_tensor_alt = torch.mm(X_tensor_alt, torch.diag(X_svd.S))
-X_tensor_alt = torch.mm(X_tensor_alt, X_svd.V.T)
-"""
-
-print(X_psi)
+    return matrix_psi
 ```
 
-    tensor([[ 1.0018e-05,  9.9972e-06,  9.9773e-06,  ..., -9.4187e-06,
-             -9.3804e-06, -9.3747e-06],
-            [-1.1966e-04,  1.9203e-05,  1.5295e-04,  ..., -3.9209e-03,
-             -4.1795e-03, -4.2179e-03]], device='cuda:0', dtype=torch.float64)
+
+```python
+X_psi = get_pseudoinverse(X_tensor)
+
+print(X_psi.shape)
+print(X_tensor.shape)
+```
+
+    torch.Size([2, 100000])
+    torch.Size([100000, 2])
     
+
+Результатом перемножения псевдообратной матрицы от X и самой матрицы X должна быть матрица, близкая к единичной:
+
+
+```python
+print(torch.mm(X_psi, X_tensor))
+```
+
+    tensor([[ 1.0000e+00, -6.7233e-20],
+            [-7.0222e-15,  1.0000e+00]], device='cuda:0', dtype=torch.float64)
+    
+
+$X \times K = Y \to K = X^{+} \times Y$, где $X^{+}$ - матрица, псевдообратная к X
 
 
 ```python
 K_approx = torch.mm(X_psi, Y_tensor)
 print(K_approx)
-
-e2_Y = torch.mm(Y_tensor.T - torch.mm(X_tensor, K_approx).T, Y_tensor - torch.mm(X_tensor, K_approx))
-
-print(e2_Y)
 ```
 
     tensor([[2.6420e-04],
             [9.9339e-01]], device='cuda:0', dtype=torch.float64)
-    tensor([[0.0045]], device='cuda:0', dtype=torch.float64)
     
 
-- $x + y$
-- $x - y$
-- $x \times y$
-- $x \div y$
-- $\dfrac{x}{y}$
-- $\sqrt{x}$
+Для нахождения ошибки между реальным значением $Y$ и его предсказанием моделью $X \times K$, можно просто посчитать их разность $e = Y - X \times K$
+
+Тогда Сумма квадратов ошибки будет $S(K) = \sum_{}^{} e_{i}^{2} = e^{T} \times e = (Y - X \times K)^{T} \times (Y - X \times K)$
+
+А среднеквадратичное отклонение $ \sigma = \sqrt{\dfrac{S(K)}{n}}$
 
 
 ```python
-"""
-# X : n*k
-# K : k*1
+e2_Y = torch.mm(Y_tensor.T - torch.mm(X_tensor, K_approx).T, Y_tensor - torch.mm(X_tensor, K_approx))
+sigma2_Y = torch.divide(e2_Y, Y_tensor.shape[0])
 
-e2_Y : 1*1
+sigma_Y = torch.sqrt(sigma2_Y)
+sigma_Y = sigma_Y.cpu().numpy()[0][0]
 
-e2_X : 1*k
-e2_K : k*1
-
-e2_Y = e2_X * K + X * e2_K
-
-"""
-
-# e2_Y = X * e2_K
-# e2_K = subinv(X) * e2_Y
-
-e2_K = torch.mm(e2_Y, X_psi)
-
-print(e2_K)
+print(sigma_Y)
 ```
 
-
-    ---------------------------------------------------------------------------
-
-    RuntimeError                              Traceback (most recent call last)
-
-    Cell In [12], line 17
-          1 """
-          2 # X : n*k
-          3 # K : k*1
-       (...)
-         11 
-         12 """
-         14 # e2_Y = X * e2_K
-         15 # e2_K = subinv(X) * e2_Y
-    ---> 17 e2_K = torch.mm(e2_Y, X_psi)
-         19 print(e2_K)
+    0.00021120826770868625
     
 
-    RuntimeError: mat1 and mat2 shapes cannot be multiplied (1x1 and 2x100000)
-
-
 
 ```python
+Y_predict = torch.mm(X_tensor, K_approx)
+Y_predict = Y_predict.cpu().numpy()
 
+print(Y_predict.T[0].shape)
+print(dataset_dict["current"][1:].shape)
+
+plt.plot(dataset_dict["time"][1:], dataset_dict["current"][1:], 'b')
+plt.plot(dataset_dict["time"][1:], Y_predict.T[0], 'r:')
+plt.xlim(time_interval)
+plt.grid()
+plt.xlabel('Время, с')
+plt.ylabel('Сила Тока, А')
+plt.legend(["Реальное значение тока", "Предсказание модели"])
 ```
 
+    (100000,)
+    (100000,)
+    
+
+
+
+
+    <matplotlib.legend.Legend at 0x182499d5a20>
+
+
+
+
+    
+![png](lab1_files/lab1_22_2.png)
+    
+
+
 
 ```python
-# Y_est = K_est * X
+print(Y_predict.T[0].shape)
+print(dataset_dict["current"][1:].shape)
 
-
+plt.plot(dataset_dict["time"][1:], dataset_dict["current"][1:] - Y_predict.T[0], 'g')
+plt.hlines([-sigma_Y, sigma_Y], dataset_dict["time"][0], dataset_dict["time"][-1], 'r')
+plt.xlim(time_interval)
+plt.grid()
+plt.xlabel('Время, с')
+plt.ylabel('Сила Тока, А')
+plt.legend(["Ошибка предсказания тока моделью", "Среднеквадратичное отклонение"])
 ```
 
+    (100000,)
+    (100000,)
+    
+
+
+
+
+    <matplotlib.legend.Legend at 0x18249177fd0>
+
+
+
+
+    
+![png](lab1_files/lab1_23_2.png)
+    
+
+
 
 ```python
+K = K_approx.cpu()
+print(K)
+
 Td = 0.001
 
-R = 1/K[0]*(1-K[1])
-T = -Td / np.log(K[1])
+L = Td / K[0]
+R = (L - K[1] * L) / Td
 
-L = T*R
-
-
+print(R)
 print(L)
 ```
+
+    tensor([[2.6420e-04],
+            [9.9339e-01]], dtype=torch.float64)
+    tensor([25.0275], dtype=torch.float64)
+    tensor([3.7850], dtype=torch.float64)
+    
 
 
 ```python
@@ -297,6 +320,12 @@ R_est = np.array(R_est)
 L_est = np.array(L_est)
 ```
 
+    C:\Users\zhidk\AppData\Local\Temp\ipykernel_10276\2326068066.py:12: FutureWarning: The input object of type 'Tensor' is an array-like implementing one of the corresponding protocols (`__array__`, `__array_interface__` or `__array_struct__`); but not a sequence (or 0-D). In the future, this object will be coerced as if it was first converted using `np.array(obj)`. To retain the old behaviour, you have to either modify the type 'Tensor', or assign to an empty array created with `np.empty(correct_shape, dtype=object)`.
+      R_est = np.array(R_est)
+    C:\Users\zhidk\AppData\Local\Temp\ipykernel_10276\2326068066.py:13: FutureWarning: The input object of type 'Tensor' is an array-like implementing one of the corresponding protocols (`__array__`, `__array_interface__` or `__array_struct__`); but not a sequence (or 0-D). In the future, this object will be coerced as if it was first converted using `np.array(obj)`. To retain the old behaviour, you have to either modify the type 'Tensor', or assign to an empty array created with `np.empty(correct_shape, dtype=object)`.
+      L_est = np.array(L_est)
+    
+
 
 ```python
 print('Mean value of R: ', np.mean(R_est), ' Ohm')
@@ -304,6 +333,12 @@ print('Standart deviation of R: ', np.std(R_est))
 print('Mean value of L = ', np.mean(L_est), ' Hn')
 print('Standart deviation of R: ', np.std(L_est))
 ```
+
+    Mean value of R:  25.027544616804754  Ohm
+    Standart deviation of R:  0.0
+    Mean value of L =  3.7724892844348483  Hn
+    Standart deviation of R:  0.0
+    
 
 
 ```python
@@ -323,3 +358,7 @@ R = (L - K[1] * L) / Td
 print('R = ', R, ' Ohm')
 print('L = ', L, ' Hn')
 ```
+
+    R =  tensor([25.0275], dtype=torch.float64)  Ohm
+    L =  tensor([3.7850], dtype=torch.float64)  Hn
+    
