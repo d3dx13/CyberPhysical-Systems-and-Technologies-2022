@@ -56,7 +56,7 @@ time_interval = (time_interval, time_interval + time_period)
 print(f"Временной интервал {time_interval}")
 ```
 
-    Временной интервал (1.8391630218611739, 1.939163021861174)
+    Временной интервал (45.93339540102384, 46.03339540102384)
     
 
 
@@ -93,11 +93,46 @@ plt.grid()
 
 ### 4. Рассчитать значения параметров L и R.
 
-Упрощённая модель двигателя постоянного тока. Модель двигателя постоянного тока описывается следующей системой дифференциальных уравнений:
+[Упрощённая модель двигателя постоянного тока](https://life-prog.ru/2_22546_model-dvigatelya-postoyannogo-toka-s-nezavisimim-vozbuzhdeniem.html). Модель двигателя постоянного тока описывается следующей системой дифференциальных уравнений:
 
-di/dt = 1 / L * u - R / L * i - Ce
+$$
+\begin{cases}
+u = e + R \times i + L \times \dfrac{di}{t}
+\\
+M - M_C = J \dfrac{d\omega}{t}
+\\
+M = C_{M} \times \Phi \times i
+\\
+e = C_{\omega} \times \Phi \times \omega
+\end{cases}
+\\
+где
+\\
+u - напряжение на якорной обмотке двигателя,
+\\
+e - электродвижущая сила (ЭДС) якоря,
+\\
+i - ток якоря,
+\\
+\Phi - поток, создаваемый обмоткой возбуждения,
+\\
+M - электромагнитный момент двигателя,
+\\
+M_С - момент сопротивления движению,
+\\
+\omega - скорость вращения вала двигателя,
+\\
+R - активное сопротивление якорной цепи,
+\\
+L - индуктивность якорной цепи,
+\\
+J - суммарный момент инерции якоря и нагрузки,
+\\
+С_{\omega} - коэффициент связи между скоростью и ЭДС,
+\\
+С_М - коэффициент связи между током якоря и электромагнитным моментом.
+$$
 
-dΩ/dt = Ce / J * i - 1 / J * Md
 
 Y = K*X
 
@@ -229,111 +264,55 @@ plt.grid()
 
 
 ```python
-print(Y_predict.T[0].shape)
-print(dataset_dict["current"][1:].shape)
+# print(Y_predict.T[0].shape)
+# print(dataset_dict["current"][1:].shape)
 
 plt.plot(dataset_dict["time"][1:], dataset_dict["current"][1:] - Y_predict.T[0], 'g')
 plt.hlines([-sigma_Y, sigma_Y], dataset_dict["time"][0], dataset_dict["time"][-1], 'r')
 plt.xlim(time_interval)
-plt.grid()
 plt.xlabel('Время, с')
 plt.ylabel('Сила Тока, А')
 plt.legend(["Ошибка предсказания тока моделью", "Среднеквадратичное отклонение"])
+plt.grid()
 ```
 
-    (100000,)
-    (100000,)
+
+    
+![png](lab1_files/lab1_23_0.png)
     
 
 
 
+```python
 
-    <matplotlib.legend.Legend at 0x18248ff23b0>
-
-
-
-
-    
-![png](lab1_files/lab1_23_2.png)
-    
-
+```
 
 
 ```python
 K = K_approx.cpu()
-print(K)
 
 Td = 0.001
-
 L = Td / K[0]
 R = (L - K[1] * L) / Td
 
-print(R)
-print(L)
+print('Вычисленное значение R = ', R.numpy()[0], ' Ом')
+print('Вычисленное значение L = ', L.numpy()[0], ' Гн')
 ```
 
-    tensor([[2.6420e-04],
-            [9.9339e-01]], dtype=torch.float64)
-    tensor([25.0275], dtype=torch.float64)
-    tensor([3.7850], dtype=torch.float64)
+    Вычисленное значение R =  25.027544616804676  Ом
+    Вычисленное значение L =  3.7850168932643307  Гн
     
 
 
 ```python
-Td = 0.001
+R = 1 / K[0] * (1 - K[1])
+T = -Td / np.log(K[1])
+L = T * R
 
-R_est = []
-L_est = []
-
-if K[1] > 0:
-    R = 1 / K[0] * (1 - K[1])
-    T = -Td / np.log(K[1])
-    R_est.append(R)
-    L_est.append(T * R)
-
-R_est = np.array(R_est)
-L_est = np.array(L_est)
+print('R = ', R.numpy()[0], ' Ohm')
+print('L = ', L.numpy()[0], ' Hn')
 ```
 
-    C:\Users\zhidk\AppData\Local\Temp\ipykernel_10276\2326068066.py:12: FutureWarning: The input object of type 'Tensor' is an array-like implementing one of the corresponding protocols (`__array__`, `__array_interface__` or `__array_struct__`); but not a sequence (or 0-D). In the future, this object will be coerced as if it was first converted using `np.array(obj)`. To retain the old behaviour, you have to either modify the type 'Tensor', or assign to an empty array created with `np.empty(correct_shape, dtype=object)`.
-      R_est = np.array(R_est)
-    C:\Users\zhidk\AppData\Local\Temp\ipykernel_10276\2326068066.py:13: FutureWarning: The input object of type 'Tensor' is an array-like implementing one of the corresponding protocols (`__array__`, `__array_interface__` or `__array_struct__`); but not a sequence (or 0-D). In the future, this object will be coerced as if it was first converted using `np.array(obj)`. To retain the old behaviour, you have to either modify the type 'Tensor', or assign to an empty array created with `np.empty(correct_shape, dtype=object)`.
-      L_est = np.array(L_est)
-    
-
-
-```python
-print('Mean value of R: ', np.mean(R_est), ' Ohm')
-print('Standart deviation of R: ', np.std(R_est))
-print('Mean value of L = ', np.mean(L_est), ' Hn')
-print('Standart deviation of R: ', np.std(L_est))
-```
-
-    Mean value of R:  25.027544616804754  Ohm
-    Standart deviation of R:  0.0
-    Mean value of L =  3.7724892844348483  Hn
-    Standart deviation of R:  0.0
-    
-
-
-```python
-# K1 = (Ts / L)
-# L = Ts / K1
-# K2 = - ((R*Ts - L) / L)
-# K2 * L = L - R*Ts
-# R*Ts = L - K2 * L
-# R = (L - K2 * L) / Ts
-
-
-L = Td / K[0]
-R = (L - K[1] * L) / Td
-
-
-
-print('R = ', R, ' Ohm')
-print('L = ', L, ' Hn')
-```
-
-    R =  tensor([25.0275], dtype=torch.float64)  Ohm
-    L =  tensor([3.7850], dtype=torch.float64)  Hn
+    R =  25.027544616804754  Ohm
+    L =  3.7724892844348483  Hn
     
