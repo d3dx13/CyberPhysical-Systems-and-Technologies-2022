@@ -19,7 +19,7 @@ for path_dir in path_dirs:
                          ".ipynb")]
     for jupyter_file in jupyter_files:
         os.system(f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_file[:-6]}')
-        os.system(f'jupyter nbconvert {jupyter_file} --to pdf --output {jupyter_file[:-6]}')
+        # os.system(f'jupyter nbconvert {jupyter_file} --to pdf --output {jupyter_file[:-6]}')
 
     os.system(f'git reset')
     os.system(f'git add .')
