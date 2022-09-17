@@ -40,7 +40,7 @@ s_new = (z - 1) / Ts;
 
 Gc = C * (eye(size(A))*s - A)^(-1) * B
 
-Gd = simplify(subs(Gc, s, s_new));
+Gd = simplify(subs(Gc, s, s_new))
 Gd = subs(Gd, z, z_i^(-1));
 Gd = simplify(Gd)
 
