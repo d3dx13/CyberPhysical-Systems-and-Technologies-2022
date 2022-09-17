@@ -2,22 +2,14 @@ import os
 import sys
 import subprocess
 
-TEMP_TEX = "___o.tex"
-TEMP_FOLDER = "/tmp"
-TRASH_EXTENSIONS = [".aux", ".out", ".log"]
-OLD1 = r"\usepackage[utf8x]{inputenc}"
+OLD1 = r"\documentclass[11pt]{article}"
 NEW1 = r"""
+\documentclass[11pt]{article}
     \usepackage[utf8x]{inputenc}
     \usepackage[T1,T2A]{fontenc}
     \usepackage[russian,english]{babel}
 """
 REPLACE = [(OLD1, NEW1)]
-HELP = """
-This script is aimed at correctly converting .ipynb to .pdf files.
-You may use it via 
-# ipynb2pdf Solution.ipynb
-To get .pdf in the same directory
-"""
 
 commit_name = ' '.join(sys.argv[1:])
 if len(commit_name) == 0:
@@ -40,7 +32,12 @@ for path_dir in path_dirs:
         subprocess.call((f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_name}'))
         subprocess.call((f'jupyter nbconvert {jupyter_file} --to latex --output {jupyter_name}.tex'))
         subprocess.call((f'pdflatex -interaction=batchmode {jupyter_name}.tex -output-format pdf'))
-        # os.rename(f'{jupyter_name}.pdf', f"{jupyter_name} - Отчёт Жидков А.А. R4136с.pdf")
+
+        with open(f'{jupyter_name}.tex', 'r', encoding="utf-8") as file:
+            filedata = file.read()
+        filedata = filedata.replace(OLD1, NEW1)
+        with open(f'{jupyter_name}.tex', 'w', encoding="utf-8") as file:
+            file.write(filedata)
 
         # os.remove(f'{jupyter_name}.tex')
         # os.remove(f'{jupyter_name}.log')
