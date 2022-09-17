@@ -38,11 +38,11 @@ for path_dir in path_dirs:
         jupyter_name = jupyter_file[:-6]
         os.system(f'jupyter nbconvert {jupyter_file} --to markdown --output {jupyter_name}')
         os.system(f'jupyter nbconvert {jupyter_file} --to latex --output {jupyter_name}.tex')
-        # os.remove(f'{jupyter_name}.log')
-        # os.remove(f'{jupyter_name}.aux')
-        # os.remove(f'{jupyter_name}.out')
         os.system(f'pdflatex -interaction=batchmode {jupyter_name}.tex -output-format pdf')
         os.remove(f'{jupyter_name}.tex')
+        os.remove(f'{jupyter_name}.log')
+        os.remove(f'{jupyter_name}.aux')
+        os.remove(f'{jupyter_name}.out')
 
 
         # os.system(f'jupyter nbconvert {jupyter_file} --to pdf --output \"{f"{jupyter_file[:-6]} - Отчёт Жидков А.А. R4136с "}\"')
