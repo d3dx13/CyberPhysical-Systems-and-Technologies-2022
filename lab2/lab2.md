@@ -1,5 +1,13 @@
 Лабораторная работа №2. Введение в проектирование нейронных сетей с помощью Python
 
+Одна из задач киберфизических систем - распознавание изображений с помощью машинного зрения. В этой лабораторной работе мы рассмотрим решение проблемы такого типа.
+
+Мы будем использовать два файла данных с массивом рукописных чисел: mnist_train.csv и mnist_test.csv. Первый файл необходимо использовать для обучения нейронной сети, второй файл необходимо использовать для проверки работы нейронной сети. Каждый файл содержит строки (60000 в первом файле и 10000 во втором файле), в каждой из которых хранится массив размером 28x28 пикселей с цифровым изображением и номером, который соответствует изображению.
+
+Основная задача - спроектировать нейронную сеть на Python, способную распознавать изображения чисел.
+
+Для начала
+
 
 ```python
 """
@@ -112,7 +120,7 @@ print()
 
 
     
-![png](lab2_files/lab2_4_1.png)
+![png](lab2_files/lab2_6_1.png)
     
 
 
@@ -129,7 +137,7 @@ print()
 
 
     
-![png](lab2_files/lab2_5_1.png)
+![png](lab2_files/lab2_7_1.png)
     
 
 
@@ -217,7 +225,7 @@ plt.imshow(image[random.randint(0, image.shape[0]), 0, :, :], cmap=plt.cm.binary
 
 
     
-![png](lab2_files/lab2_8_2.png)
+![png](lab2_files/lab2_10_2.png)
     
 
 
@@ -269,7 +277,7 @@ optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=learning_mo
 
 ```python
 # epochs to train for
-epochs = 1000
+epochs = 1
 
 for epoch in range(1, epochs + 1):
     clear_output(wait=True)
@@ -332,14 +340,14 @@ for epoch in range(1, epochs + 1):
     plt.show()
 ```
 
-    Текущая Эпоха: 485
-    Training Loss: 0.073134
-    Validation Loss: 0.079139
+    Текущая Эпоха: 940
+    Training Loss: 0.03266
+    Validation Loss: 0.052915
     
 
 
     
-![png](lab2_files/lab2_10_1.png)
+![png](lab2_files/lab2_12_1.png)
     
 
 
@@ -353,6 +361,9 @@ reload(LeNet)
 model_new = LeNet.LeNet()
 model_new.cuda()
 model_new.load_state_dict(torch.load(f'{MODEL_NAME}.pt'))
+
+output_max = None
+output_min = None
 ```
 
 
@@ -368,8 +379,16 @@ for batch_idx, (data, target) in enumerate(test_loader):
     # forward pass
     output = model_new(normalize_transforms(train_transforms(data)))
 
-    output_max = torch.max(output)
-    output_min = torch.min(output)
+    local_max = np.max(output.detach().cpu().numpy(), axis=0)
+    local_min = np.min(output.detach().cpu().numpy(), axis=0)
+    if output_max is None:
+        output_max = local_max
+    else:
+        output_max = np.max(np.array([local_max, output_max]), axis=0)
+    if output_min is None:
+        output_min = local_min
+    else:
+        output_min = np.min(np.array([local_min, output_min]), axis=0)
 
     # batch loss
     loss = criterion(output, target)
@@ -382,7 +401,7 @@ for batch_idx, (data, target) in enumerate(test_loader):
     correct = np.squeeze(correct_tensor.numpy()) if not torch.cuda.is_available() else np.squeeze(
         correct_tensor.cpu().numpy())
     # calculate test accuracy for each object class
-    for i in range(10):
+    for i in range(len(target.data)):
         label = target.data[i]
         class_correct[label] += correct[i].item()
         class_total[label] += 1
@@ -400,9 +419,28 @@ for i in range(10):
 print(
     f'Full Test Accuracy: {round(100. * np.sum(class_correct) / np.sum(class_total), 2)}% {np.sum(class_correct)} out of {np.sum(class_total)}')
 
-output_min = output_min.cpu().detach().numpy()
-output_max = output_max.cpu().detach().numpy()
+output_max = np.array(output_max)
+output_min = np.array(output_min)
+print(f"output_min = {output_min}\noutput_max = {output_max}")
 ```
+
+    Test Loss: 0.040989
+    Test Accuracy of 0: 99.29%
+    Test Accuracy of 1: 99.3%
+    Test Accuracy of 2: 98.93%
+    Test Accuracy of 3: 98.81%
+    Test Accuracy of 4: 98.78%
+    Test Accuracy of 5: 98.88%
+    Test Accuracy of 6: 98.96%
+    Test Accuracy of 7: 98.05%
+    Test Accuracy of 8: 98.15%
+    Test Accuracy of 9: 97.22%
+    Full Test Accuracy: 98.64% 9864.0 out of 10000.0
+    output_min = [-12.405435 -10.730108 -12.911035 -12.028286 -11.388719 -11.590592
+     -18.247143 -13.193559  -7.603819 -10.83747 ]
+    output_max = [12.5716915 16.748579  19.614042  19.389887  18.39213   18.968506
+     17.291187  17.354427  18.150793  17.49377  ]
+    
 
 
 ```python
@@ -418,11 +456,12 @@ while len(prediction_threshold_low) < prediction_threshold_amount:
         clear_output(wait=True)
         data = normalize_transforms(train_transforms(data))
         output = model_new(data[:1, :1, :, :]).cpu().detach()
-        output = (output.numpy()[0] - output_min) / (output_max - output_min)
+        output = np.divide(output.numpy()[0] - output_min, output_max - output_min)
         if target[0] == np.argmax(output):
             continue
         prediction_threshold_low.append(np.max(output))
-        print(f"calibration lower threshold {100 * len(prediction_threshold_low) / prediction_threshold_amount:.2f}%")
+        print(
+            f"calibration lower threshold {100 * len(prediction_threshold_low) / prediction_threshold_amount:.2f}%")
         print(f"real value = {target[0]}")
         print(f"prediction = {np.argmax(output)}")
         print(f"prediction % = {np.max(output)}")
@@ -434,10 +473,13 @@ while len(prediction_threshold_low) < prediction_threshold_amount:
 
 threshold_low = np.mean(np.array(prediction_threshold_low))
 threshold_low_std = np.std(np.array(prediction_threshold_low))
-
 clear_output(wait=True)
-print(f"lower threshold = {threshold_low} with std = {threshold_low_std}")
+print(f"lower threshold = {threshold_low}\n with std = {threshold_low_std}")
 ```
+
+    lower threshold = 0.6780125498771667
+     with std = 0.07119216024875641
+    
 
 
 ```python
@@ -448,9 +490,12 @@ while len(prediction_threshold_high) < prediction_threshold_amount:
         clear_output(wait=True)
         data = normalize_transforms(train_transforms(data))
         output = model_new(data[:1, :1, :, :]).cpu().detach()
-        output = (output.numpy()[0] - output_min) / (output_max - output_min)
+        output = np.divide(output.numpy()[0] - output_min, output_max - output_min)
+        if target[0] != np.argmax(output):
+            continue
         prediction_threshold_high.append(np.max(output))
-        print(f"calibration upper threshold {100 * len(prediction_threshold_high) / prediction_threshold_amount:.2f}%")
+        print(
+            f"calibration upper threshold {100 * len(prediction_threshold_high) / prediction_threshold_amount:.2f}%")
         print(f"real value = {target[0]}")
         print(f"prediction = {np.argmax(output)}")
         print(f"prediction % = {np.max(output)}")
@@ -462,10 +507,12 @@ while len(prediction_threshold_high) < prediction_threshold_amount:
 
 threshold_high = np.mean(np.array(prediction_threshold_high))
 threshold_high_std = np.std(np.array(prediction_threshold_high))
-
 clear_output(wait=True)
 print(f"upper threshold = {threshold_high} with std = {threshold_high_std}")
 ```
+
+    upper threshold = 0.8538323044776917 with std = 0.07443483918905258
+    
 
 
 ```python
@@ -479,4 +526,25 @@ plt.legend(["Верхний порог уверенности", "Нижний п
 print(f"final confidence threshold = {confidence_threshold}")
 print(f"from {threshold_low} => to {threshold_high}")
 print(f"window = {threshold_high - threshold_low}")
+print(f"output_min = {output_min}\noutput_max = {output_max}")
+```
+
+    final confidence threshold = 0.7643010914325714
+    from 0.6780125498771667 => to 0.8538323044776917
+    window = 0.1758197546005249
+    output_min = [-12.405435 -10.730108 -12.911035 -12.028286 -11.388719 -11.590592
+     -18.247143 -13.193559  -7.603819 -10.83747 ]
+    output_max = [12.5716915 16.748579  19.614042  19.389887  18.39213   18.968506
+     17.291187  17.354427  18.150793  17.49377  ]
+    
+
+
+    
+![png](lab2_files/lab2_18_1.png)
+    
+
+
+
+```python
+
 ```
