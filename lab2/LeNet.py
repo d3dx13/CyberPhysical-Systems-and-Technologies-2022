@@ -88,6 +88,7 @@ if __name__ == '__main__':
     while (True):
 
         ret, image = camera.read()
+
         frame = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         frame = frame[:, (frame.shape[1] - frame.shape[0]) // 2:]
         frame = frame[:, :frame.shape[0]]
@@ -106,31 +107,33 @@ if __name__ == '__main__':
             components_stats[i].append(i)
         components_stats = sorted(components_stats, key=lambda x: x[4], reverse=True)
         thresh = np.zeros_like(thresh)
+        thresh_bgr = cv2.cvtColor(thresh, cv2.COLOR_GRAY2BGR)
+
         if len(components_stats) > 1 and components_stats[1][-2] > thresh.shape[0] * thresh.shape[1] * 0.01:
             thresh[components[1] == components_stats[1][-1]] = 255
+            thresh_bgr = cv2.cvtColor(thresh, cv2.COLOR_GRAY2BGR)
 
-        thresh = np.reshape(thresh, (1, 1, thresh.shape[0], thresh.shape[1]))
+            thresh = np.reshape(thresh, (1, 1, thresh.shape[0], thresh.shape[1]))
 
-        data = normalize_transforms(torch.tensor(np.float32(thresh) / 255.0).cuda())
-        data_cpu = data.detach().cpu().numpy()
+            data = normalize_transforms(torch.tensor(np.float32(thresh) / 255.0).cuda())
+            data_cpu = data.detach().cpu().numpy()
 
-        output = np.divide(model_new(data).detach().cpu().numpy() - OUTPUT_MIN, OUTPUT_MAX - OUTPUT_MIN)
-        output_argmax = np.argmax(output)
-        output_max = np.max(output)
+            output = np.divide(model_new(data).detach().cpu().numpy() - OUTPUT_MIN, OUTPUT_MAX - OUTPUT_MIN)
+            output_argmax = np.argmax(output)
+            output_max = np.max(output)
 
-        thresh_bgr = cv2.cvtColor(thresh[0, 0, :, :], cv2.COLOR_GRAY2BGR)
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        org = (0, thresh_bgr.shape[0] // 2 + 50)
-        fontScale = 5
-        thickness = 10
-        if output_max > CONFIDENCE_THRESHOLD:
-            color = (0, 255, 0)
-        else:
-            color = (0, 0, 127)
-        thresh_bgr = cv2.putText(thresh_bgr, str(output_argmax), org, font,
-                            fontScale, color, thickness, cv2.LINE_AA)
-        image = cv2.putText(image, str(output_argmax), org, font,
-                            fontScale, color, thickness, cv2.LINE_AA)
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            org = (0, thresh_bgr.shape[0] // 2 + 50)
+            fontScale = 5
+            thickness = 10
+            if output_max > CONFIDENCE_THRESHOLD:
+                color = (0, 255, 0)
+            else:
+                color = (0, 0, 127)
+            thresh_bgr = cv2.putText(thresh_bgr, str(output_argmax), org, font,
+                                fontScale, color, thickness, cv2.LINE_AA)
+            image = cv2.putText(image, str(output_argmax), org, font,
+                                fontScale, color, thickness, cv2.LINE_AA)
 
         cv2.imshow('thresh', thresh_bgr)
         cv2.imshow('image', image)
