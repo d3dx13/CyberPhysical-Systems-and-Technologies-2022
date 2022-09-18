@@ -4,6 +4,10 @@
 ```python
 """
 https://github.com/vedaant-varshney/ImageClassifierCNN/blob/master/Image%20Classifier.ipynb
+
+https://vitalflux.com/different-types-of-cnn-architectures-explained-examples
+
+https://sahiltinky94.medium.com/know-about-googlenet-and-implementation-using-pytorch-92f827d675db
 """
 
 from IPython.display import clear_output
@@ -16,11 +20,19 @@ import scipy
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+import gc
 import torch.backends.cudnn
+
+num_workers = 0
+batch_size = 100
+valid_size = 0.2
+learning_rate = 0.01
+learning_momentum = 0.9
+MODEL_NAME = "LeNet"
 
 torch.cuda.synchronize()
 torch.cuda.empty_cache()
+gc.collect()
 
 torch.use_deterministic_algorithms(False)
 torch.backends.cudnn.benchmark = True
@@ -89,36 +101,36 @@ print("Классы: ", np.unique(numbers_train.cpu()))
 
 
 ```python
-"""
 number_train = random.randint(0, images_test.cpu().shape[0])
 plt.imshow(images_test.cpu()[number_train, 0, :, :], cmap=plt.cm.binary, vmin=0, vmax=1)
 plt.title(f"Число из обучающего датасета: {numbers_test.cpu().numpy()[number_train]}")
 print()
-"""
 ```
 
+    
+    
 
 
-
-    '\nnumber_train = random.randint(0, images_test.cpu().shape[0])\nplt.imshow(images_test.cpu()[number_train, 0, :, :], cmap=plt.cm.binary, vmin=0, vmax=1)\nplt.title(f"Число из обучающего датасета: {numbers_test.cpu().numpy()[number_train]}")\nprint()\n'
-
+    
+![png](lab2_files/lab2_4_1.png)
+    
 
 
 
 ```python
-"""
 number_test = random.randint(0, images_test.cpu().shape[0])
 plt.imshow(images_test.cpu()[number_test, 0, :, :], cmap=plt.cm.binary, vmin=0, vmax=1)
 plt.title(f"Число из тестового датасета: {numbers_test.cpu().numpy()[number_test]}")
 print()
-"""
 ```
 
+    
+    
 
 
-
-    '\nnumber_test = random.randint(0, images_test.cpu().shape[0])\nplt.imshow(images_test.cpu()[number_test, 0, :, :], cmap=plt.cm.binary, vmin=0, vmax=1)\nplt.title(f"Число из тестового датасета: {numbers_test.cpu().numpy()[number_test]}")\nprint()\n'
-
+    
+![png](lab2_files/lab2_5_1.png)
+    
 
 
 
@@ -139,23 +151,22 @@ from torch.utils.data.sampler import SubsetRandomSampler
 from torch.utils.data import TensorDataset, DataLoader
 
 from importlib import reload
-import model_architecture
-reload(model_architecture)
+import LeNet
+
+reload(LeNet)
 
 # Picking Fashion-MNIST dataset
-
-num_workers = 0
-batch_size = 100
-valid_size = 0.2
 
 train_transforms = transforms.Compose([
     transforms.RandomRotation(25),
     transforms.RandomInvert(p=0.5),
 ])
+# transforms.RandomInvert(p=0.5),
 normalize_transforms = transforms.Compose([
-    transforms.Resize(size=model_architecture.IMAGE_SIZE, interpolation=transforms.InterpolationMode.BICUBIC),
+    transforms.Resize(size=LeNet.IMAGE_SIZE, interpolation=transforms.InterpolationMode.BICUBIC),
     transforms.Normalize((0.5,), (0.5,)),
 ])
+# transforms.Normalize((0.5,), (0.5,)),
 
 train_data = TensorDataset(images_train, numbers_train)
 test_data = TensorDataset(images_test, numbers_test)
@@ -194,13 +205,13 @@ image = normalize_transforms(train_transforms(data.cpu()))
 plt.imshow(image[random.randint(0, image.shape[0]), 0, :, :], cmap=plt.cm.binary, vmin=-1, vmax=1)
 ```
 
-    torch.Size([100, 1, 28, 28]) torch.Size([100]) 6
+    torch.Size([100, 1, 28, 28]) torch.Size([100]) 7
     
 
 
 
 
-    <matplotlib.image.AxesImage at 0x2268e7f5420>
+    <matplotlib.image.AxesImage at 0x1ea70355cf0>
 
 
 
@@ -213,53 +224,44 @@ plt.imshow(image[random.randint(0, image.shape[0]), 0, :, :], cmap=plt.cm.binary
 
 ```python
 from importlib import reload
-import model_architecture
-reload(model_architecture)
-
+import torchvision.models
+import LeNet
 import torch.optim as optim
 
+reload(LeNet)
 
-model = model_architecture.Net()
+model = LeNet.LeNet()
 model.cuda()
 print(model)
 
 # loss function (cross entropy loss)
 criterion = nn.CrossEntropyLoss()
 
-# optimizer
-optimizer = optim.SGD(model.parameters(), lr=0.001)
-optimizer = optim.SGD(model.parameters(), lr=0.05)
-
 train_losses = []
 valid_losses = []
+
+# tracks validation loss change after each epoch
+minimum_validation_loss = np.inf
+
+# optimizer
+optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=learning_momentum)
 ```
 
-    Net(
+    LeNet(
       (conv): Sequential(
-        (0): Conv2d(1, 64, kernel_size=(15, 15), stride=(1, 1), padding=(7, 7))
-        (1): ReLU()
-        (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-        (3): Conv2d(64, 16, kernel_size=(11, 11), stride=(1, 1), padding=(5, 5))
-        (4): ReLU()
-        (5): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-        (6): Conv2d(16, 4, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3))
-        (7): ReLU()
-        (8): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-        (9): Conv2d(4, 16, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
-        (10): ReLU()
-        (11): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-        (12): Conv2d(16, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-        (13): ReLU()
-        (14): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+        (0): Conv2d(1, 6, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+        (1): Sigmoid()
+        (2): AvgPool2d(kernel_size=(2, 2), stride=2, padding=0)
+        (3): Conv2d(6, 16, kernel_size=(5, 5), stride=(1, 1))
+        (4): Sigmoid()
+        (5): AvgPool2d(kernel_size=(2, 2), stride=2, padding=0)
       )
       (fc): Sequential(
-        (0): Linear(in_features=256, out_features=4096, bias=True)
-        (1): ReLU()
-        (2): Dropout(p=0.2, inplace=False)
-        (3): Linear(in_features=4096, out_features=128, bias=True)
-        (4): ReLU()
-        (5): Dropout(p=0.2, inplace=False)
-        (6): Linear(in_features=128, out_features=10, bias=True)
+        (0): Linear(in_features=400, out_features=120, bias=True)
+        (1): Sigmoid()
+        (2): Linear(in_features=120, out_features=84, bias=True)
+        (3): Sigmoid()
+        (4): Linear(in_features=84, out_features=10, bias=True)
       )
     )
     
@@ -267,10 +269,7 @@ valid_losses = []
 
 ```python
 # epochs to train for
-epochs = 10
-
-# tracks validation loss change after each epoch
-minimum_validation_loss = np.inf
+epochs = 1000
 
 for epoch in range(1, epochs + 1):
     clear_output(wait=True)
@@ -314,27 +313,28 @@ for epoch in range(1, epochs + 1):
     valid_losses.append(valid_loss)
 
     # Display loss statistics
-    print(f'Current Epoch: {epoch}\nTraining Loss: {round(train_loss, 6)}\nValidation Loss: {round(valid_loss, 6)}')
+    print(
+        f'Текущая Эпоха: {len(train_losses)}\nTraining Loss: {round(train_loss, 6)}\nValidation Loss: {round(valid_loss, 6)}')
 
     # Saving model every time validation loss decreases
     if valid_loss <= minimum_validation_loss:
-        print(f'Validation loss decreased from {round(minimum_validation_loss, 6)} to {round(valid_loss, 6)}')
-        torch.save(model.state_dict(), 'trained_model.pt')
+        print(f'Validation loss уменьшилась с {round(minimum_validation_loss, 6)} до {round(valid_loss, 6)}')
+        torch.save(model.state_dict(), f'{MODEL_NAME}.pt')
         minimum_validation_loss = valid_loss
-        print('Saving New Model')
+        print('Сохранение новой модели')
 
     plt.plot(train_losses, 'g')
     plt.plot(valid_losses, 'r')
     plt.ylim([0, max(np.max(np.array(train_losses)), np.max(np.array(train_losses)), 0.0) * 1.1])
     plt.xlabel("Эпоха")
     plt.ylabel("Точность")
-    plt.legend(["train loss", "valid loss"])
+    plt.legend(["Training loss", "Validation loss"])
     plt.show()
 ```
 
-    Current Epoch: 10
-    Training Loss: 0.068745
-    Validation Loss: 0.087545
+    Текущая Эпоха: 485
+    Training Loss: 0.073134
+    Validation Loss: 0.079139
     
 
 
@@ -346,22 +346,14 @@ for epoch in range(1, epochs + 1):
 
 ```python
 from importlib import reload
-import model_architecture
-import torch.optim as optim
+import LeNet
 
-reload(model_architecture)
+reload(LeNet)
 
-model_new = model_architecture.Net()
+model_new = LeNet.LeNet()
 model_new.cuda()
-model_new.load_state_dict(torch.load('trained_model.pt'))
+model_new.load_state_dict(torch.load(f'{MODEL_NAME}.pt'))
 ```
-
-
-
-
-    <All keys matched successfully>
-
-
 
 
 ```python
@@ -373,8 +365,6 @@ class_total = list(0. for i in range(10))
 model_new.eval()
 
 for batch_idx, (data, target) in enumerate(test_loader):
-    # move tensors to GPU
-    data, target = data.cuda(), target.cuda()
     # forward pass
     output = model_new(normalize_transforms(train_transforms(data)))
 
@@ -392,7 +382,7 @@ for batch_idx, (data, target) in enumerate(test_loader):
     correct = np.squeeze(correct_tensor.numpy()) if not torch.cuda.is_available() else np.squeeze(
         correct_tensor.cpu().numpy())
     # calculate test accuracy for each object class
-    for i in range(28):
+    for i in range(10):
         label = target.data[i]
         class_correct[label] += correct[i].item()
         class_total[label] += 1
@@ -414,24 +404,9 @@ output_min = output_min.cpu().detach().numpy()
 output_max = output_max.cpu().detach().numpy()
 ```
 
-    torch.Size([100, 64, 2, 2])
-    Test Loss: 0.059814
-    Test Accuracy of 0: 100.0%
-    Test Accuracy of 1: 99.37%
-    Test Accuracy of 2: 97.4%
-    Test Accuracy of 3: 97.92%
-    Test Accuracy of 4: 98.6%
-    Test Accuracy of 5: 99.57%
-    Test Accuracy of 6: 97.63%
-    Test Accuracy of 7: 95.1%
-    Test Accuracy of 8: 96.79%
-    Test Accuracy of 9: 97.23%
-    Full Test Accuracy: 97.93% 2742.0 out of 2800.0
-    
-
 
 ```python
-prediction_threshold_amount = 100
+prediction_threshold_amount = 1000
 ```
 
 
@@ -458,13 +433,11 @@ while len(prediction_threshold_low) < prediction_threshold_amount:
             break
 
 threshold_low = np.mean(np.array(prediction_threshold_low))
+threshold_low_std = np.std(np.array(prediction_threshold_low))
 
 clear_output(wait=True)
-print(f"lower threshold = {threshold_low}")
+print(f"lower threshold = {threshold_low} with std = {threshold_low_std}")
 ```
-
-    lower threshold = 0.5743429064750671
-    
 
 
 ```python
@@ -488,28 +461,22 @@ while len(prediction_threshold_high) < prediction_threshold_amount:
             break
 
 threshold_high = np.mean(np.array(prediction_threshold_high))
+threshold_high_std = np.std(np.array(prediction_threshold_high))
 
 clear_output(wait=True)
-print(f"upper threshold = {threshold_high}")
+print(f"upper threshold = {threshold_high} with std = {threshold_high_std}")
 ```
-
-    upper threshold = 0.7724108099937439
-    
 
 
 ```python
-confidence_threshold = threshold_high / 2 + threshold_low / 2
+confidence_threshold = (threshold_high - threshold_high_std) / 2 + (threshold_low + threshold_low_std) / 2
+
+plt.plot(prediction_threshold_high, "b")
+plt.plot(prediction_threshold_low, "g")
+plt.hlines([confidence_threshold, ], xmin=0, xmax=len(prediction_threshold_high), colors=["r", ])
+plt.legend(["Верхний порог уверенности", "Нижний порог уверенности", "Линия раздела уверенности"])
+
 print(f"final confidence threshold = {confidence_threshold}")
 print(f"from {threshold_low} => to {threshold_high}")
 print(f"window = {threshold_high - threshold_low}")
-```
-
-    final confidence threshold = 0.6733768582344055
-    from 0.5743429064750671 => to 0.7724108099937439
-    window = 0.19806790351867676
-    
-
-
-```python
-
 ```
